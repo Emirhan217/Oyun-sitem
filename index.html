@@ -45,162 +45,120 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        /* 2. GELİŞTİRİLMİŞ SİBER ANA EKRAN (HERO) */
+        /* NAVİGASYON BAR */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: flex-end; gap: 30px; box-sizing: border-box;
+            z-index: 100; backdrop-filter: blur(5px); background: rgba(3, 3, 5, 0.5);
+        }
+        nav a {
+            color: #fff; text-decoration: none; font-weight: bold; font-size: 18px;
+            letter-spacing: 1px; transition: 0.3s; text-transform: uppercase;
+        }
+        nav a:hover { color: #39ff14; text-shadow: 0 0 10px #39ff14; }
+
+        /* 2. SİBER ANA EKRAN (HERO) */
         .hero {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative;
-            background: radial-gradient(circle at center, #1a0033 0%, #030305 70%);
-            overflow: hidden;
-            text-align: center;
+            position: relative; background: radial-gradient(circle at center, #1a0033 0%, #030305 70%);
+            overflow: hidden; text-align: center;
         }
-        
-        /* Arka plandaki hareketli siber çizgiler efekti */
         .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-position: center;
-            transform: perspective(500px) rotateX(60deg) translateY(-100px);
-            animation: gridMove 20s linear infinite;
-            z-index: 1;
-            opacity: 0.6;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; background-position: center;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px); animation: gridMove 20s linear infinite;
+            z-index: 1; opacity: 0.6;
         }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 400px; }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 400px; } }
+        .hero-content { position: relative; z-index: 2; }
         .hero h1 { 
-            font-size: 90px; 
-            font-weight: 900;
-            margin: 0; 
-            color: #fff; 
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 90px; font-weight: 900; margin: 0; color: #fff; text-transform: uppercase; letter-spacing: 8px;
+            background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.6));
         }
-
-        .hero p {
-            color: #39ff14; 
-            font-size: 24px; 
-            font-weight: 600;
-            letter-spacing: 3px;
-            margin-top: 15px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
-        }
-
+        .hero p { color: #39ff14; font-size: 24px; font-weight: 600; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
         .explore-btn {
-            margin-top: 40px; padding: 16px 45px; font-size: 18px; font-weight: bold;
-            background: transparent; color: #fff; border: 2px solid #39ff14;
-            border-radius: 50px; cursor: pointer; transition: all 0.4s ease;
-            text-decoration: none; display: inline-block;
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-top: 40px; padding: 16px 45px; font-size: 18px; font-weight: bold; background: transparent; color: #fff; border: 2px solid #39ff14;
+            border-radius: 50px; cursor: pointer; transition: all 0.4s ease; text-decoration: none; display: inline-block;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1); text-transform: uppercase; letter-spacing: 2px;
         }
-        .explore-btn:hover { 
-            background: #39ff14; color: #000; 
-            box-shadow: 0 0 35px #39ff14, 0 0 10px #39ff14;
-            transform: scale(1.05);
-        }
+        .explore-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 35px #39ff14, 0 0 10px #39ff14; transform: scale(1.05); }
 
-        /* 3. OYUN LİSTESİ VE LOGOLAR */
-        .container { padding: 100px 20px; text-align: center; position: relative; }
+        /* 3. KAPSAYICILAR VE BAŞLIKLAR */
+        .container { padding: 80px 20px; text-align: center; position: relative; }
         .container h2 {
-            font-size: 48px; font-weight: 800; color: #fff; 
-            text-transform: uppercase; letter-spacing: 4px;
-            background: linear-gradient(to right, #bc13fe, #39ff14);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 60px;
+            font-size: 48px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 4px;
+            background: linear-gradient(to right, #bc13fe, #39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 60px;
         }
-
         .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
         
+        /* KART TASARIMLARI */
         .game-card {
-            background: rgba(15, 15, 25, 0.7); 
-            border: 2px solid rgba(188, 19, 254, 0.3); 
-            border-radius: 24px; padding: 35px; width: 260px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            backdrop-filter: blur(10px);
+            background: rgba(15, 15, 25, 0.7); border: 2px solid rgba(188, 19, 254, 0.3); border-radius: 24px; padding: 35px; width: 260px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(10px);
         }
-        .game-card:hover { 
-            transform: translateY(-15px) scale(1.02); 
-            box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); 
-            border-color: #39ff14; 
-        }
-
+        .game-card:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
         .game-logo {
             width: 110px; height: 110px; background: #141420; border-radius: 50%; margin: 0 auto 25px auto;
             display: flex; justify-content: center; align-items: center; font-size: 55px;
             border: 2px solid #bc13fe; box-shadow: 0 0 15px rgba(188, 19, 254, 0.4); transition: all 0.3s ease;
         }
-        .game-card:hover .game-logo { 
-            border-color: #39ff14; box-shadow: 0 0 25px #39ff14; background: #050508; 
-            transform: rotate(10deg);
-        }
-
+        .game-card:hover .game-logo { border-color: #39ff14; box-shadow: 0 0 25px #39ff14; background: #050508; transform: rotate(10deg); }
         .game-card h3 { color: #fff; font-size: 28px; font-weight: 700; margin: 15px 0 10px 0; }
-        .game-card p { color: #b0b0bc; font-size: 15px; line-height: 1.5; }
+        .game-card p { color: #b0b0bc; font-size: 15px; line-height: 1.5; height: 70px; overflow: hidden; }
 
         .game-btn {
-            background: linear-gradient(135deg, #bc13fe, #8a06c4); color: #fff; border: none; 
-            padding: 14px 35px; border-radius: 12px; cursor: pointer; margin-top: 25px; 
-            font-weight: bold; font-size: 16px; letter-spacing: 1px; transition: all 0.3s ease;
-            text-transform: uppercase;
+            background: linear-gradient(135deg, #bc13fe, #8a06c4); color: #fff; border: none; padding: 14px 35px; border-radius: 12px;
+            cursor: pointer; margin-top: 25px; font-weight: bold; font-size: 16px; letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase;
         }
-        .game-btn:hover { 
-            background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; 
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
-            transform: translateY(-2px);
-        }
+        .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); transform: translateY(-2px); }
 
-        /* 4. OYUN PENCERELERI (POPUP) */
+        /* MAĞAZA YÜKLE BUTONU */
+        .store-btn {
+            background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 14px 35px; border-radius: 12px;
+            cursor: pointer; margin-top: 25px; font-weight: bold; font-size: 16px; letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase;
+        }
+        .store-btn:hover:not(:disabled) { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
+        .store-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+
+        /* 4. OYUN PENCERELERİ */
         .game-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 10000;
-            backdrop-filter: blur(15px);
+            align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px);
         }
         .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; transition: 0.2s; }
         .close-btn:hover { transform: scale(1.1); color: #ff6b81; }
 
-        /* Satranç Yeni Tasarım */
+        /* Satranç Yenilenen CSS */
         #chess-board { display: grid; grid-template-columns: repeat(8, 55px); grid-template-rows: repeat(8, 55px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
         .square { width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 38px; cursor: pointer; user-select: none; }
         .white { background-color: #f0d9b5; color: #000; }
         .black { background-color: #b58863; color: #000; }
-        .selected { background-color: #39ff14 !important; box-shadow: inset 0 0 10px #000; }
+        .selected { background-color: #39ff14 !important; box-shadow: inset 0 0 12px rgba(0,0,0,0.6); }
 
-        /* Tenis Sahası */
+        /* Tenis */
         canvas#pongCanvas { border: 3px solid #39ff14; background: #000; box-shadow: 0 0 25px rgba(57, 255, 20, 0.4); }
 
-        /* Renkli Tıklama Kutusu */
-        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.3); transition: background-color 0.1s; }
+        /* Tıklama */
+        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; }
 
-        /* Hafıza Oyunu Tasarımı */
+        /* Hafıza */
         #memory-board { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; }
-        .card { width: 75px; height: 75px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s; }
-        .card:hover { transform: scale(1.05); }
-        .card.flipped { background: #141420; border: 2px solid #39ff14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+        .card { width: 75px; height: 75px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px; cursor: pointer; }
+        .card.flipped { background: #141420; border: 2px solid #39ff14; }
 
-        /* Yılan Oyunu Sahası */
+        /* Yılan */
         canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; box-shadow: 0 0 25px rgba(255, 159, 67, 0.4); }
     </style>
 </head>
 <body>
+
+    <nav>
+        <a href="#oyunlar">Ana Ekran</a>
+        <a href="#magaza">Oyun Mağazası</a>
+    </nav>
 
     <div id="intro-container">
         <div id="portal-element" class="portal"></div>
@@ -223,80 +181,80 @@
     </section>
 
     <div class="container" id="oyunlar">
-        <h2>Popüler Oyunlar</h2>
-        
-        <div class="games-grid">
-            <div class="game-card">
-                <div class="game-logo">👑</div>
-                <h3>Satranç</h3>
-                <p>Taş değiştirme ve seçim hatası giderilmiş güncel sürüm!</p>
-                <button class="game-btn" onclick="openGame('chess')">Oyna</button>
+        <h2>Yüklü Oyunlarım</h2>
+        <div class="games-grid" id="main-games-area">
             </div>
+    </div>
 
-            <div class="game-card">
-                <div class="game-logo">🎾</div>
-                <h3>Tenis</h3>
-                <p>Gelişmiş bota karşı reflekslerini yarıştır!</p>
-                <button class="game-btn" onclick="openGame('tennis')">Oyna</button>
+    <div class="container" id="magaza" style="background: rgba(10, 5, 20, 0.6); border-top: 2px solid #00f2ff;">
+        <h2 style="background: linear-gradient(to right, #00f2ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Oyun Mağazası</h2>
+        <p style="color: #00f2ff; font-size: 18px; margin-bottom: 40px;">İstediğin oyunu seç ve altındaki butona basarak ana ekrana hemen yükle!</p>
+        <div class="games-grid" id="store-games-area">
             </div>
-
-            <div class="game-card">
-                <div class="game-logo">🎯</div>
-                <h3>Renkli Tıklama</h3>
-                <p>Doğru renge en hızlı sürede tıkla, kendi rekorunu kır!</p>
-                <button class="game-btn" onclick="openGame('click')">Oyna</button>
-            </div>
-
-            <div class="game-card">
-                <div class="game-logo">🧠</div>
-                <h3>Hafıza Oyunu</h3>
-                <p>Kartları eşleştir, hafızanın gücünü göster!</p>
-                <button class="game-btn" onclick="openGame('memory')">Oyna</button>
-            </div>
-
-            <div class="game-card">
-                <div class="game-logo">🐍</div>
-                <h3>Yılan Oyunu</h3>
-                <p>Yemleri topla, kendini çarpmadan en uzun boya ulaş!</p>
-                <button class="game-btn" onclick="openGame('snake')">Oyna</button>
-            </div>
-        </div>
     </div>
 
-    <div id="popup-chess" class="game-popup">
-        <span class="close-btn" onclick="closeGame('chess')">&times;</span>
-        <h2 style="color: #bc13fe; margin-bottom: 20px; font-size: 32px;">Satranç Dünyası</h2>
-        <div id="chess-board"></div>
-    </div>
-
-    <div id="popup-tennis" class="game-popup">
-        <span class="close-btn" onclick="closeGame('tennis')">&times;</span>
-        <h2 style="color: #39ff14; margin-bottom: 10px; font-size: 32px;">Tenis (Bota Karşı)</h2>
-        <div id="scoreArea" style="font-size: 24px; color: #fff; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div>
-        <canvas id="pongCanvas" width="700" height="400"></canvas>
-    </div>
-
-    <div id="popup-click" class="game-popup">
-        <span class="close-btn" onclick="closeGame('click')">&times;</span>
-        <h2 style="color: #00f2ff; margin-bottom: 20px; font-size: 32px;">Hız Testi</h2>
-        <div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div>
-        <p id="click-score" style="font-size: 24px; margin-top: 20px; color: #39ff14;"></p>
-    </div>
-
-    <div id="popup-memory" class="game-popup">
-        <span class="close-btn" onclick="closeGame('memory')">&times;</span>
-        <h2 style="color: #ff9f43; margin-bottom: 20px; font-size: 32px;">Hafıza Kartı Eşleştirme</h2>
-        <div id="memory-board"></div>
-    </div>
-
-    <div id="popup-snake" class="game-popup">
-        <span class="close-btn" onclick="closeGame('snake')">&times;</span>
-        <h2 style="color: #ff9f43; margin-bottom: 10px; font-size: 32px;">Klasik Yılan Oyunu</h2>
-        <div style="font-size: 22px; margin-bottom: 15px;">Skor: <span id="sScore">0</span></div>
-        <canvas id="snakeCanvas" width="400" height="400"></canvas>
-    </div>
+    <div id="popup-chess" class="game-popup"><span class="close-btn" onclick="closeGame('chess')">&times;</span><h2 style="color: #bc13fe; margin-bottom: 20px; font-size: 32px;">Satranç</h2><div id="chess-board"></div></div>
+    <div id="popup-tennis" class="game-popup"><span class="close-btn" onclick="closeGame('tennis')">&times;</span><h2 style="color: #39ff14; margin-bottom: 10px; font-size: 32px;">Tenis</h2><div style="font-size: 24px; color: #fff; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div><canvas id="pongCanvas" width="700" height="400"></canvas></div>
+    <div id="popup-click" class="game-popup"><span class="close-btn" onclick="closeGame('click')">&times;</span><h2 style="color: #00f2ff; margin-bottom: 20px; font-size: 32px;">Hız Testi</h2><div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div><p id="click-score" style="font-size: 24px; margin-top: 20px; color: #39ff14;"></p></div>
+    <div id="popup-memory" class="game-popup"><span class="close-btn" onclick="closeGame('memory')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 20px; font-size: 32px;">Hafıza Kartları</h2><div id="memory-board"></div></div>
+    <div id="popup-snake" class="game-popup"><span class="close-btn" onclick="closeGame('snake')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 10px; font-size: 32px;">Yılan Oyunu</h2><div style="font-size: 22px; margin-bottom: 15px;">Skor: <span id="sScore">0</span></div><canvas id="snakeCanvas" width="400" height="400"></canvas></div>
 
     <script>
+        // --- MAĞAZA VE OYUN VERİLERİ ---
+        const TÜM_OYUNLAR = {
+            chess: { id: 'chess', logo: '👑', title: 'Satranç', desc: 'Taş seçme, kare ilerleme ve rakip taş yeme sorunları tamamen düzeltilmiş kararlı sürüm.' },
+            tennis: { id: 'tennis', logo: '🎾', title: 'Tenis', desc: 'Yapay zekaya sahip gelişmiş bota karşı reflekslerini yarıştır.' },
+            click: { id: 'click', logo: '🎯', title: 'Renkli Tıklama', desc: 'Doğru renge en hızlı sürede tıkla ve kendi milisaniye rekorunu kır.' },
+            memory: { id: 'memory', logo: '🧠', title: 'Hafıza Oyunu', desc: 'Kart eşleştirme mekaniği ile zihnini test et ve süreye meydan oku.' },
+            snake: { id: 'snake', logo: '🐍', title: 'Yılan Oyunu', desc: 'Yemleri topla, kendine veya duvarlara çarpmadan en uzun boya ulaş.' }
+        };
+
+        let yukluOyunlar = [];
+
+        function updateUIVisuals() {
+            const mainArea = document.getElementById('main-games-area');
+            const storeArea = document.getElementById('store-games-area');
+            
+            mainArea.innerHTML = yukluOyunlar.length === 0 
+                ? `<p style="color: #ff4757; font-size: 20px; grid-column: 1/-1;">Henüz hiçbir oyun yüklemediniz! Aşağıdaki Mağaza bölümünden oyun yükleyebilirsiniz.</p>` 
+                : '';
+            
+            yukluOyunlar.forEach(gameId => {
+                const game = TÜM_OYUNLAR[gameId];
+                mainArea.innerHTML += `
+                    <div class="game-card">
+                        <div class="game-logo">${game.logo}</div>
+                        <h3>${game.title}</h3>
+                        <p>${game.desc}</p>
+                        <button class="game-btn" onclick="openGame('${game.id}')">Oyna</button>
+                    </div>`;
+            });
+
+            storeArea.innerHTML = '';
+            Object.keys(TÜM_OYUNLAR).forEach(gameId => {
+                const game = TÜM_OYUNLAR[gameId];
+                const isInstalled = yukluOyunlar.includes(gameId);
+                storeArea.innerHTML += `
+                    <div class="game-card" style="border-color: #00f2ff;">
+                        <div class="game-logo" style="border-color: #00f2ff; box-shadow: 0 0 10px rgba(0,242,255,0.3);">${game.logo}</div>
+                        <h3>${game.title}</h3>
+                        <p>${game.desc}</p>
+                        <button class="store-btn" id="btn-${game.id}" ${isInstalled ? 'disabled' : ''} onclick="installGame('${game.id}')">
+                            ${isInstalled ? 'Yüklendi' : 'Yükle'}
+                        </button>
+                    </div>`;
+            });
+        }
+
+        function installGame(gameId) {
+            if(!yukluOyunlar.includes(gameId)) {
+                yukluOyunlar.push(gameId);
+                updateUIVisuals();
+            }
+        }
+
+        updateUIVisuals();
+
         // --- INTRO ANİMASYONU ---
         setTimeout(() => {
             document.getElementById('portal-element').style.transform = 'scale(0.4)';
@@ -323,203 +281,114 @@
         }
         function closeGame(gameName) { document.getElementById('popup-' + gameName).style.display = 'none'; }
 
-        // --- BUGSUZ SATRANÇ SİSTEMİ ---
-        let boardState = [];
-        let selectedSquare = null;
+        // --- KESİNTİSİZ SATRANÇ SİSTEMİ ---
+        let boardState = []; let selectedSquare = null;
         function buildChessBoard() {
             selectedSquare = null;
             boardState = [
-                ['♜','♞','♝','♛','♚','♝','♞','♜'],
-                ['♟','♟','♟','♟','♟','♟','♟','♟'],
+                ['♜','♞','♝','♛','♚','♝','♞','♜'], ['♟','♟','♟','♟','♟','♟','♟','♟'],
                 ['','','','','','','',''], ['','','','','','','',''],
                 ['','','','','','','',''], ['','','','','','','',''],
-                ['♙','♙','♙','♙','♙','♙','♙','♙'],
-                ['♖','♘','♗','♕','♔','♗','♘','♖']
+                ['♙','♙','♙','♙','♙','♙','♙','♙'], ['♖','♘','♗','♕','♔','♗','♘','♖']
             ];
             drawGrid();
         }
-
         function drawGrid() {
-            const board = document.getElementById('chess-board');
-            board.innerHTML = '';
+            const board = document.getElementById('chess-board'); board.innerHTML = '';
             for(let r=0; r<8; r++) {
                 for(let c=0; c<8; c++) {
                     const sq = document.createElement('div');
-                    sq.className = `square ${(r+c)%2===0?'white':'black'}`;
-                    sq.textContent = boardState[r][c];
-                    
-                    if(selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
-                        sq.classList.add('selected');
-                    }
-                    
+                    sq.className = `square ${(r+c)%2===0?'white':'black'}`; sq.textContent = boardState[r][c];
+                    if(selectedSquare && selectedSquare.r === r && selectedSquare.c === c) sq.classList.add('selected');
                     sq.onclick = () => handleSquareClick(r, c);
                     board.appendChild(sq);
                 }
             }
         }
-
         function handleSquareClick(r, c) {
             if (selectedSquare === null) {
-                if (boardState[r][c] !== '') {
-                    selectedSquare = {r, c};
-                    drawGrid();
-                }
+                // İlk tıklamada kare boş değilse taşı seç
+                if (boardState[r][c] !== '') { selectedSquare = {r, c}; drawGrid(); }
             } else {
-                if(selectedSquare.r === r && selectedSquare.c === c) {
-                    selectedSquare = null;
-                    drawGrid();
-                    return;
-                }
-                if(boardState[r][c] !== '' && ((boardState[r][c] === boardState[r][c].toUpperCase() && boardState[selectedSquare.r][selectedSquare.c] === boardState[selectedSquare.r][selectedSquare.c].toUpperCase()) || (boardState[r][c] === boardState[r][c].toLowerCase() && boardState[selectedSquare.r][selectedSquare.c] === boardState[selectedSquare.r][selectedSquare.c].toLowerCase()))) {
-                     selectedSquare = {r, c};
-                     drawGrid();
-                     return;
-                }
+                // Aynı kareye tekrar tıklanırsa seçimi kaldır
+                if(selectedSquare.r === r && selectedSquare.c === c) { selectedSquare = null; drawGrid(); return; }
                 
-                boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c];
-                boardState[selectedSquare.r][selectedSquare.c] = '';
-                selectedSquare = null;
+                // Seçilen taşı hedef kareye taşı (İster boş olsun ister rakip taş olsun, üstüne yazar)
+                boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; 
+                boardState[selectedSquare.r][selectedSquare.c] = ''; 
+                selectedSquare = null; 
                 drawGrid();
             }
         }
 
         // --- TENİS (BOTLU PONG) ---
-        let pongInterval;
-        let playerScore = 0, botScore = 0;
+        let pongInterval; let playerScore = 0, botScore = 0;
         function startTennisGame() {
-            const canvas = document.getElementById('pongCanvas');
-            const ctx = canvas.getContext('2d');
-            let ballX = 350, ballY = 200, speedX = 5, speedY = 5;
-            let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
-
-            canvas.onmousemove = (e) => {
-                let rect = canvas.getBoundingClientRect();
-                pY = e.clientY - rect.top - pHeight / 2;
-            };
-
+            const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
+            let ballX = 350, ballY = 200, speedX = 5, speedY = 5; let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
+            canvas.onmousemove = (e) => { let rect = canvas.getBoundingClientRect(); pY = e.clientY - rect.top - pHeight / 2; };
             clearInterval(pongInterval);
             pongInterval = setInterval(() => {
                 if(document.getElementById('popup-tennis').style.display !== 'flex') { clearInterval(pongInterval); return; }
                 ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 700, 400);
-                
-                ctx.fillStyle = '#39ff14'; ctx.beginPath(); ctx.arc(ballX, ballY, 10, 0, Math.PI*2); ctx.fill();
-                ctx.fillRect(15, pY, 15, pHeight);
+                ctx.fillStyle = '#39ff14'; ctx.beginPath(); ctx.arc(ballX, ballY, 10, 0, Math.PI*2); ctx.fill(); ctx.fillRect(15, pY, 15, pHeight);
                 ctx.fillStyle = '#ff4757'; ctx.fillRect(670, bY, 15, bHeight);
-
-                if(bY + bHeight/2 < ballY - 15) bY += 4.2;
-                else if(bY + bHeight/2 > ballY + 15) bY -= 4.2;
-
+                if(bY + bHeight/2 < ballY - 15) bY += 4.2; else if(bY + bHeight/2 > ballY + 15) bY -= 4.2;
                 ballX += speedX; ballY += speedY;
                 if(ballY < 10 || ballY > 390) speedY = -speedY;
-                
                 if(ballX < 35 && ballY > pY && ballY < pY + pHeight) speedX = -speedX;
                 if(ballX > 655 && ballY > bY && ballY < bY + bHeight) speedX = -speedX;
-
                 if(ballX < 0) { botScore++; ballX = 350; ballY = 200; speedX = 5; updateScores(); }
                 if(ballX > 700) { playerScore++; ballX = 350; ballY = 200; speedX = -5; updateScores(); }
             }, 1000/60);
         }
-        function updateScores() {
-            document.getElementById('pScore').textContent = playerScore;
-            document.getElementById('bScore').textContent = botScore;
-        }
+        function updateScores() { document.getElementById('pScore').textContent = playerScore; document.getElementById('bScore').textContent = botScore; }
 
         // --- RENKLİ TIKLAMA ---
         let reflexTime = 0, isWaiting = false;
         function handleClickBox() {
-            const box = document.getElementById('click-box');
-            const scoreText = document.getElementById('click-score');
+            const box = document.getElementById('click-box'); const scoreText = document.getElementById('click-score');
             if(!isWaiting) {
                 box.textContent = 'BEKLE...'; box.style.backgroundColor = 'red'; isWaiting = true; scoreText.textContent = '';
-                setTimeout(() => {
-                    box.style.backgroundColor = '#39ff14'; box.style.color = '#000'; box.textContent = 'TIKLA!'; reflexTime = Date.now();
-                }, 1500 + Math.random() * 2500);
+                setTimeout(() => { box.style.backgroundColor = '#39ff14'; box.style.color = '#000'; box.textContent = 'TIKLA!'; reflexTime = Date.now(); }, 1500 + Math.random() * 2500);
             } else if(reflexTime > 0) {
-                scoreText.textContent = `Hız Skorun: ${Date.now() - reflexTime} ms`;
-                box.textContent = 'YENİDEN BAŞLA'; box.style.backgroundColor = 'transparent'; box.style.color = '#fff';
-                reflexTime = 0; isWaiting = false;
+                scoreText.textContent = `Hız Skorun: ${Date.now() - reflexTime} ms`; box.textContent = 'YENİDEN BAŞLA'; box.style.backgroundColor = 'transparent'; box.style.color = '#fff'; reflexTime = 0; isWaiting = false;
             }
         }
 
         // --- HAFIZA OYUNU ---
-        let cards = ['🔥','🔥','⚡','⚡','👑','👑','💎','💎','🍎','🍎','🚗','🚗','🎈','🎈','👾','👾'];
-        let choice1 = null, choice2 = null;
+        let cards = ['🔥','🔥','⚡','⚡','👑','👑','💎','💎','🍎','🍎','🚗','🚗','🎈','🎈','👾','👾']; let choice1 = null, choice2 = null;
         function startMemoryGame() {
-            const mBoard = document.getElementById('memory-board');
-            mBoard.innerHTML = ''; choice1 = null; choice2 = null;
+            const mBoard = document.getElementById('memory-board'); mBoard.innerHTML = ''; choice1 = null; choice2 = null;
             cards.sort(() => 0.5 - Math.random());
-            cards.forEach((val, i) => {
-                const c = document.createElement('div');
-                c.className = 'card'; c.dataset.icon = val; c.dataset.id = i;
-                c.onclick = () => flipCard(c);
-                mBoard.appendChild(c);
-            });
+            cards.forEach((val, i) => { const c = document.createElement('div'); c.className = 'card'; c.dataset.icon = val; c.dataset.id = i; c.onclick = () => flipCard(c); mBoard.appendChild(c); });
         }
         function flipCard(c) {
             if(c.classList.contains('flipped') || choice2) return;
             c.textContent = c.dataset.icon; c.classList.add('flipped');
             if(!choice1) choice1 = c;
-            else {
-                choice2 = c;
-                if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; }
-                else {
-                    setTimeout(() => {
-                        choice1.textContent = ''; choice2.textContent = '';
-                        choice1.classList.remove('flipped'); choice2.classList.remove('flipped');
-                        choice1 = null; choice2 = null;
-                    }, 800);
-                }
-            }
+            else { choice2 = c; if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; } else { setTimeout(() => { choice1.textContent = ''; choice2.textContent = ''; choice1.classList.remove('flipped'); choice2.classList.remove('flipped'); choice1 = null; choice2 = null; }, 800); } }
         }
 
         // --- YILAN OYUNU ---
         let snakeInterval;
         function startSnakeGame() {
-            const canvas = document.getElementById('snakeCanvas');
-            const ctx = canvas.getContext('2d');
-            let boxSize = 20;
-            let snake = [{x: 200, y: 200}];
-            let food = {x: 100, y: 100};
-            let dx = boxSize, dy = 0;
-            let score = 0;
+            const canvas = document.getElementById('snakeCanvas'); const ctx = canvas.getContext('2d');
+            let boxSize = 20; let snake = [{x: 200, y: 200}]; let food = {x: 100, y: 100}; let dx = boxSize, dy = 0; let score = 0;
             document.getElementById('sScore').textContent = score;
-
             document.onkeydown = (e) => {
-                if (e.key === 'ArrowLeft' && dx === 0) { dx = -boxSize; dy = 0; }
-                else if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -boxSize; }
-                else if (e.key === 'ArrowRight' && dx === 0) { dx = boxSize; dy = 0; }
-                else if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = boxSize; }
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -boxSize; dy = 0; } else if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -boxSize; } else if (e.key === 'ArrowRight' && dx === 0) { dx = boxSize; dy = 0; } else if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = boxSize; }
             };
-
             clearInterval(snakeInterval);
             snakeInterval = setInterval(() => {
                 if(document.getElementById('popup-snake').style.display !== 'flex') { clearInterval(snakeInterval); return; }
-                
                 let head = {x: snake[0].x + dx, y: snake[0].y + dy};
-                
-                if(head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
-                    alert("Oyun Bitti! Skorunuz: " + score);
-                    startSnakeGame();
-                    return;
-                }
-                
+                if(head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) { alert("Oyun Bitti! Skorunuz: " + score); startSnakeGame(); return; }
                 snake.unshift(head);
-                
-                if(head.x === food.x && head.y === food.y) {
-                    score += 10;
-                    document.getElementById('sScore').textContent = score;
-                    food = {
-                        x: Math.floor(Math.random() * 20) * boxSize,
-                        y: Math.floor(Math.random() * 20) * boxSize
-                    };
-                } else {
-                    snake.pop();
-                }
-
+                if(head.x === food.x && head.y === food.y) { score += 10; document.getElementById('sScore').textContent = score; food = { x: Math.floor(Math.random() * 20) * boxSize, y: Math.floor(Math.random() * 20) * boxSize }; } else { snake.pop(); }
                 ctx.fillStyle = '#0d0d13'; ctx.fillRect(0, 0, 400, 400);
                 ctx.fillStyle = '#ff9f43'; snake.forEach(s => ctx.fillRect(s.x, s.y, boxSize-2, boxSize-2));
                 ctx.fillStyle = '#ff4757'; ctx.fillRect(food.x, food.y, boxSize-2, boxSize-2);
-
             }, 150);
         }
     </script>
