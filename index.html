@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oyun Dünyası | Eğlence Başlasın</title>
+    <title>Oyun Dünyası | İki Oyun Bir Arada</title>
     <style>
         * {
             margin: 0;
@@ -46,7 +46,7 @@
             font-weight: 500;
         }
 
-        /* Giriş Ekranı */
+        /* Giriş Ekranı (Karşılama) */
         .hero {
             height: 100vh;
             display: flex;
@@ -61,6 +61,13 @@
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #cccccc;
+            margin-bottom: 30px;
         }
 
         .btn-play {
@@ -79,33 +86,79 @@
         .btn-play:hover {
             background-color: #ff5e3a;
             color: white;
+            transform: translateY(-3px);
         }
 
-        /* Oyunlar Alanı */
+        /* Oyunlar Bölümü Izgarası */
         .games-section {
-            padding: 100px 20px;
+            padding: 120px 20px;
             text-align: center;
             background-color: #121212;
             min-height: 100vh;
         }
 
         .games-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
+            font-size: 2.8rem;
+            margin-bottom: 50px;
             color: #ff9f43;
         }
 
-        /* Satranç Kutusu */
-        .game-container {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 460px;
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1100px;
             margin: 0 auto;
+            align-items: start;
         }
 
-        /* Bağımsız Saf HTML/CSS Satranç Tahtası */
+        /* Ortak Oyun Kartı Tasarımı */
+        .game-card {
+            background-color: #1e1e1e;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 159, 67, 0.1);
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ff9f43;
+        }
+
+        /* 1. OYUN: TIKLAMA OYUNU */
+        .click-game-area {
+            background-color: #16161a;
+            transition: background-color 0.4s ease;
+        }
+
+        .score-board {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .click-btn {
+            background-color: #ff9f43;
+            color: #121212;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 159, 67, 0.3);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .click-btn:active { transform: scale(0.95); }
+        .click-btn:hover { background-color: #ff5e3a; color: white; }
+
+        /* 2. OYUN: SATRANÇ */
         .chessboard {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -120,16 +173,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.2s;
         }
 
-        /* Tahta Renkleri */
-        .white-square { background-color: #f0d9b5; color: #000; }
-        .black-square { background-color: #b58863; color: #000; }
-        
+        .white-square { background-color: #f0d9b5; }
+        .black-square { background-color: #b58863; }
         .square.selected { background-color: #7ab873 !important; }
 
         .status-text {
@@ -143,9 +193,12 @@
             border: none;
             padding: 10px 20px;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: 0.2s;
         }
+
+        .btn-reset:hover { background-color: #ff5e3a; color: white; }
     </style>
 </head>
 <body>
@@ -157,25 +210,50 @@
 
     <section class="hero">
         <h1>Oyun Siteme Hoş Geldin! 🚀</h1>
-        <p>Eğlenceli oyunlar aşağıda seni bekliyor.</p>
-        <a href="#oyunlar" class="btn-play">Hemen Oyna 👇</a>
+        <p>Tıklama ve Satranç oyunlarımız hemen aşağıda seni bekliyor.</p>
+        <a href="#oyunlar" class="btn-play">Oyunları Keşfet 👇</a>
     </section>
 
     <section id="oyunlar" class="games-section">
-        <h2>Satranç Oyunu</h2>
-        <div class="game-container">
-            <p class="status-text">Sıra: <span id="turn-text" style="color: #ff9f43; font-weight: bold;">Beyazda</span></p>
+        <h2>Oyun Alanı</h2>
+        
+        <div class="games-grid">
             
-            <div id="board" class="chessboard"></div>
-            
-            <button class="btn-reset" onclick="resetGame()">Oyunu Yeniden Başlat</button>
+            <div id="clickGameCard" class="game-card click-game-area">
+                <h3>Tıklama Oyunu</h3>
+                <div class="score-board">Skor: <span id="score" style="color: #ff9f43;">0</span></div>
+                <button class="click-btn" onclick="increaseScore()">BANA TIKLA!</button>
+                <p style="margin-top: 15px; color: #aaa; font-size: 0.9rem;">Her 10 skorda bir arka plan değişir!</p>
+            </div>
+
+            <div class="game-card">
+                <h3>Satranç Oyunu</h3>
+                <p class="status-text">Sıra: <span id="turn-text" style="color: #ff9f43; font-weight: bold;">Beyazda</span></p>
+                
+                <div id="board" class="chessboard"></div>
+                
+                <button class="btn-reset" onclick="resetGame()">Oyunu Yeniden Başlat</button>
+            </div>
+
         </div>
     </section>
 
     <script>
-        // Başlangıç Tahtası Dizilimi (Uluslararası Standart Harfler)
-        // Büyük harfler Beyaz (R=Kale, N=At, B=Fil, Q=Vezir, K=Şah, P=Piyon)
-        // Küçük harfler Siyah (r, n, b, q, k, p)
+        // --- 1. TIKLAMA OYUNU LOGIC ---
+        let score = 0;
+        const clickBgColors = ['#16161a', '#1e3c72', '#11998e', '#7F00FF', '#ff5e62'];
+
+        function increaseScore() {
+            score++;
+            document.getElementById('score').textContent = score;
+
+            if (score % 10 === 0) {
+                const randomColor = clickBgColors[Math.floor(Math.random() * clickBgColors.length)];
+                document.getElementById('clickGameCard').style.backgroundColor = randomColor;
+            }
+        }
+
+        // --- 2. SATRANÇ OYUNU LOGIC ---
         const initialBoard = [
             ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
             ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -187,20 +265,18 @@
             ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
         ];
 
-        // Gerçek Taş Karakterleri (Unicode)
         const piecesSymbols = {
             'R': '♜', 'N': '♞', 'B': '♝', 'Q': '♛', 'K': '♚', 'P': '♟',
             'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟'
         };
 
-        // Taş Renk Ayırıcıları
         const pieceColors = {
             'R': 'w', 'N': 'w', 'B': 'w', 'Q': 'w', 'K': 'w', 'P': 'w',
             'r': 'b', 'n': 'b', 'b': 'b', 'q': 'b', 'k': 'b', 'p': 'b'
         };
 
         let currentBoard = JSON.parse(JSON.stringify(initialBoard));
-        let turn = 'w'; // 'w' = Beyaz, 'b' = Siyah
+        let turn = 'w'; 
         let selectedSquare = null;
 
         const boardElement = document.getElementById('board');
@@ -213,13 +289,10 @@
                     const square = document.createElement('div');
                     const isBlackSquare = (r + c) % 2 === 1;
                     square.classList.add('square', isBlackSquare ? 'black-square' : 'white-square');
-                    square.dataset.row = r;
-                    square.dataset.col = c;
-
+                    
                     const piece = currentBoard[r][c];
                     if (piece) {
                         square.textContent = piecesSymbols[piece];
-                        // Beyaz taşları açık renk, siyahları koyu renk yapalım
                         square.style.color = pieceColors[piece] === 'w' ? '#ffffff' : '#000000';
                     }
 
@@ -237,26 +310,24 @@
             const piece = currentBoard[r][c];
 
             if (selectedSquare) {
-                // Aynı yere tıklandıysa seçimi iptal et
                 if (selectedSquare.row === r && selectedSquare.col === c) {
                     selectedSquare = null;
                     createBoard();
                     return;
                 }
 
-                // Taşı hareket ettir (Basit serbest hareket modudur, dış kütüphanesiz hatasız çalışır)
+                // Taşı taşı
                 currentBoard[r][c] = currentBoard[selectedSquare.row][selectedSquare.col];
                 currentBoard[selectedSquare.row][selectedSquare.col] = '';
                 selectedSquare = null;
                 
-                // Sırayı değiştir
+                // Sıra değişimi
                 turn = turn === 'w' ? 'b' : 'w';
                 turnText.textContent = turn === 'w' ? 'Beyazda' : 'Siyahda';
                 turnText.style.color = turn === 'w' ? '#ff9f43' : '#a2a2a2';
                 
                 createBoard();
             } else {
-                // Seçilen taş sırası gelen oyuncuya mı ait kontrolü
                 if (piece && pieceColors[piece] === turn) {
                     selectedSquare = { row: r, col: c };
                     createBoard();
@@ -273,7 +344,7 @@
             createBoard();
         }
 
-        // Oyunu İlk Kez Başlat
+        // Başlangıçta tahtayı yükle
         createBoard();
     </script>
 </body>
