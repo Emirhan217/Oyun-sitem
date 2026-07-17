@@ -116,12 +116,20 @@
         }
         .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); transform: translateY(-2px); }
 
+        /* MAĞAZA BUTONLARI VE EK SİLME/RELOAD STİLLERİ */
+        .store-btn-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; }
         .store-btn {
             background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 14px 30px; border-radius: 12px;
             cursor: pointer; font-weight: bold; font-size: 14px; letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase; width: 100%;
         }
         .store-btn:hover:not(:disabled) { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
-        .store-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .store-btn:disabled { background: #141420; border: 1px solid #333; color: #555; cursor: not-allowed; }
+        
+        .reload-btn {
+            background: transparent; border: 2px solid #ff9f43; color: #ff9f43; padding: 10px; border-radius: 12px;
+            cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase; transition: 0.3s; width: 100%; box-sizing: border-box;
+        }
+        .reload-btn:hover { background: #ff9f43; color: #000; box-shadow: 0 0 15px #ff9f43; }
 
         /* 4. OYUN PENCERELERİ VE POPUPLAR */
         .game-popup {
@@ -308,14 +316,24 @@
             Object.keys(MAĞAZA_OYUNLARI).forEach(gameId => {
                 const game = MAĞAZA_OYUNLARI[gameId];
                 const isInstalled = magazadanYuklenenler.includes(gameId);
+                
+                let buttonHTML = '';
+                if (!isInstalled) {
+                    buttonHTML = `<button class="store-btn" onclick="installAndDownload('${gameId}')">Yükle</button>`;
+                } else {
+                    buttonHTML = `
+                        <div class="store-btn-wrapper">
+                            <button class="store-btn" disabled>Yüklendi ✓</button>
+                            <button class="reload-btn" onclick="reinstallGame('${gameId}')">🔄 Tekrar Yükle / İndir</button>
+                        </div>`;
+                }
+
                 storeArea.innerHTML += `
                     <div class="game-card" style="border-color: #00f2ff;">
                         <div class="game-logo" style="border-color: #00f2ff; box-shadow: 0 0 10px rgba(0,242,255,0.3);">${game.logo}</div>
                         <h3>${game.title}</h3>
                         <p>${game.desc}</p>
-                        <button class="store-btn" id="btn-${game.id}" ${isInstalled ? 'disabled' : ''} onclick="installAndDownload('${gameId}')">
-                            ${isInstalled ? 'Yüklendi' : 'Yükle'}
-                        </button>
+                        ${buttonHTML}
                     </div>`;
             });
         }
@@ -327,6 +345,18 @@
                 updateUIVisuals();
                 downloadGameStandalone(gameId);
             }
+        }
+
+        // TEKRAR YÜKLEME / İNDİRME FONKSİYONU
+        function reinstallGame(gameId) {
+            // Eğer listede yoksa ekle (güvenlik için), varsa direkt indirmeyi tetikle
+            if(!magazadanYuklenenler.includes(gameId)) {
+                magazadanYuklenenler.push(gameId);
+                localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler));
+            }
+            updateUIVisuals();
+            downloadGameStandalone(gameId); // Dosyayı tekrar indirir
+            alert("Oyun başarıyla yeniden yüklendi ve cihazınıza indirildi!");
         }
 
         // Mağazadan telefona .html indirme mekanizması
@@ -351,7 +381,7 @@
             if(gameName === 'tennis') startTennisGame();
             if(gameName === 'memory') startMemoryGame();
             if(gameName === 'snake') startSnakeGame();
-            if(gameName === 'conquest') resetConquestUI(); // Strateji oyunu sıfırlanarak açılır
+            if(gameName === 'conquest') resetConquestUI(); 
         }
         function closeGame(gameName) { document.getElementById('popup-' + gameName).style.display = 'none'; }
 
