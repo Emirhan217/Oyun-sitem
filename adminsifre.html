@@ -1,11 +1,23 @@
-<div id="login-form" style="text-align: center; margin-top: 50px;">
-    <h2>Admin Paneli Girişi</h2>
-    <input type="password" id="password-input" placeholder="Şifreyi giriniz">
-    <button onclick="kontrolEt()">Giriş Yap</button>
-    <p id="hata-mesaji" style="color: red; display: none;">Hatalı şifre girdiniz!</p>
-</div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Girişi</title>
+</head>
+<body>
 
-<div id="admin-icerik" style="display: none;">
-    <h3>Hoş geldiniz, Kral Ayhan!</h3>
-    <p>Burası sizin admin panelinizdir.</p>
-</div>
+    <div id="login-form" style="text-align: center; margin-top: 50px;">
+        <h2>Admin Paneli Girişi</h2>
+        <input type="password" id="password-input" placeholder="Şifreyi giriniz">
+        <button onclick="kontrolEt()">Giriş Yap</button>
+        <p id="hata-mesaji" style="color: red; display: none;">Hatalı şifre girdiniz!</p>
+    </div>
+
+    <div id="admin-icerik" style="display: none; text-align: center; margin-top: 50px;">
+        <h3>Hoş geldiniz, Kral Ayhan!</h3>
+        <p>Burası sizin gizli admin panelinizdir. Artık burayı görebiliyorsunuz.</p>
+        </div>
+
+    <script src="adminsifre.js"></script>
+</body>
+</html>
