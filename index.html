@@ -9,8 +9,8 @@
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #050505;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #030305;
             color: #fff;
             scroll-behavior: smooth;
             overflow-x: hidden;
@@ -45,70 +45,159 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        /* 2. VİDEO EFEKTLİ ANA EKRAN */
+        /* 2. GELİŞTİRİLMİŞ SİBER ANA EKRAN (HERO) */
         .hero {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: linear-gradient(45deg, #050505, #140029, #050505); background-size: 400% 400%;
-            animation: videoBackground 12s ease infinite; text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, #1a0033 0%, #030305 70%);
+            overflow: hidden;
+            text-align: center;
         }
-        @keyframes videoBackground { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .hero h1 { font-size: 80px; margin: 0; color: #bc13fe; text-shadow: 0 0 25px #bc13fe; letter-spacing: 5px; }
-        .explore-btn {
-            margin-top: 30px; padding: 15px 40px; font-size: 18px; background: transparent; color: #fff;
-            border: 2px solid #39ff14; border-radius: 50px; cursor: pointer; transition: 0.3s;
-            text-decoration: none; box-shadow: 0 0 15px #39ff14;
+        
+        /* Arka plandaki hareketli siber çizgiler efekti */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px);
+            animation: gridMove 20s linear infinite;
+            z-index: 1;
+            opacity: 0.6;
         }
-        .explore-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 30px #39ff14; }
 
-        /* 3. OYUN LİSTESİ VEE LOGOLAR */
-        .container { padding: 80px 20px; text-align: center; }
-        .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 40px; }
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 400px; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 { 
+            font-size: 90px; 
+            font-weight: 900;
+            margin: 0; 
+            color: #fff; 
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.6));
+        }
+
+        .hero p {
+            color: #39ff14; 
+            font-size: 24px; 
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .explore-btn {
+            margin-top: 40px; padding: 16px 45px; font-size: 18px; font-weight: bold;
+            background: transparent; color: #fff; border: 2px solid #39ff14;
+            border-radius: 50px; cursor: pointer; transition: all 0.4s ease;
+            text-decoration: none; display: inline-block;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .explore-btn:hover { 
+            background: #39ff14; color: #000; 
+            box-shadow: 0 0 35px #39ff14, 0 0 10px #39ff14;
+            transform: scale(1.05);
+        }
+
+        /* 3. OYUN LİSTESİ VE LOGOLAR */
+        .container { padding: 100px 20px; text-align: center; position: relative; }
+        .container h2 {
+            font-size: 48px; font-weight: 800; color: #fff; 
+            text-transform: uppercase; letter-spacing: 4px;
+            background: linear-gradient(to right, #bc13fe, #39ff14);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 60px;
+        }
+
+        .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+        
         .game-card {
-            background: #111; border: 2px solid #bc13fe; border-radius: 20px; padding: 30px; width: 260px;
-            transition: 0.4s; box-shadow: 0 0 15px rgba(188, 19, 254, 0.2);
+            background: rgba(15, 15, 25, 0.7); 
+            border: 2px solid rgba(188, 19, 254, 0.3); 
+            border-radius: 24px; padding: 35px; width: 260px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            backdrop-filter: blur(10px);
         }
-        .game-card:hover { transform: translateY(-15px); box-shadow: 0 0 30px #39ff14; border-color: #39ff14; }
+        .game-card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); 
+            border-color: #39ff14; 
+        }
+
         .game-logo {
-            width: 100px; height: 100px; background: #222; border-radius: 50%; margin: 0 auto 20px auto;
-            display: flex; justify-content: center; align-items: center; font-size: 50px;
-            border: 2px solid #bc13fe; box-shadow: 0 0 10px #bc13fe; transition: 0.3s;
+            width: 110px; height: 110px; background: #141420; border-radius: 50%; margin: 0 auto 25px auto;
+            display: flex; justify-content: center; align-items: center; font-size: 55px;
+            border: 2px solid #bc13fe; box-shadow: 0 0 15px rgba(188, 19, 254, 0.4); transition: all 0.3s ease;
         }
-        .game-card:hover .game-logo { border-color: #39ff14; box-shadow: 0 0 20px #39ff14; background: #000; }
-        .game-card h3 { color: #fff; font-size: 26px; margin: 10px 0; }
+        .game-card:hover .game-logo { 
+            border-color: #39ff14; box-shadow: 0 0 25px #39ff14; background: #050508; 
+            transform: rotate(10deg);
+        }
+
+        .game-card h3 { color: #fff; font-size: 28px; font-weight: 700; margin: 15px 0 10px 0; }
+        .game-card p { color: #b0b0bc; font-size: 15px; line-height: 1.5; }
+
         .game-btn {
-            background: #bc13fe; color: #fff; border: none; padding: 12px 30px; border-radius: 8px;
-            cursor: pointer; margin-top: 20px; font-weight: bold; font-size: 16px; transition: 0.3s;
+            background: linear-gradient(135deg, #bc13fe, #8a06c4); color: #fff; border: none; 
+            padding: 14px 35px; border-radius: 12px; cursor: pointer; margin-top: 25px; 
+            font-weight: bold; font-size: 16px; letter-spacing: 1px; transition: all 0.3s ease;
+            text-transform: uppercase;
         }
-        .game-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 20px #39ff14; }
+        .game-btn:hover { 
+            background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; 
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
+            transform: translateY(-2px);
+        }
 
         /* 4. OYUN PENCERELERI (POPUP) */
         .game-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); display: none; flex-direction: column;
+            background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
             align-items: center; justify-content: center; z-index: 10000;
+            backdrop-filter: blur(15px);
         }
-        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #ff4757; cursor: pointer; }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { transform: scale(1.1); color: #ff6b81; }
 
         /* Satranç Yeni Tasarım */
-        #chess-board { display: grid; grid-template-columns: repeat(8, 55px); grid-template-rows: repeat(8, 55px); border: 5px solid #bc13fe; }
+        #chess-board { display: grid; grid-template-columns: repeat(8, 55px); grid-template-rows: repeat(8, 55px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
         .square { width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 38px; cursor: pointer; user-select: none; }
         .white { background-color: #f0d9b5; color: #000; }
         .black { background-color: #b58863; color: #000; }
         .selected { background-color: #39ff14 !important; box-shadow: inset 0 0 10px #000; }
 
         /* Tenis Sahası */
-        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; box-shadow: 0 0 20px #39ff14; }
+        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; box-shadow: 0 0 25px rgba(57, 255, 20, 0.4); }
 
         /* Renkli Tıklama Kutusu */
-        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 15px; }
+        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.3); transition: background-color 0.1s; }
 
         /* Hafıza Oyunu Tasarımı */
-        #memory-board { display: grid; grid-template-columns: repeat(4, 70px); gap: 10px; }
-        .card { width: 70px; height: 70px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 30px; border-radius: 8px; cursor: pointer; }
-        .card.flipped { background: #222; border: 1px solid #39ff14; }
+        #memory-board { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; }
+        .card { width: 75px; height: 75px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .card:hover { transform: scale(1.05); }
+        .card.flipped { background: #141420; border: 2px solid #39ff14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
 
         /* Yılan Oyunu Sahası */
-        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #111; box-shadow: 0 0 20px #ff9f43; }
+        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; box-shadow: 0 0 25px rgba(255, 159, 67, 0.4); }
     </style>
 </head>
 <body>
@@ -126,13 +215,15 @@
     </div>
 
     <section class="hero">
-        <h1>Oyun Sitem</h1>
-        <p style="color: #39ff14; font-size: 22px; letter-spacing: 2px;">Geleceğin Oyun Dünyası</p>
-        <a href="#oyunlar" class="explore-btn">Oyunları Keşfet</a>
+        <div class="hero-content">
+            <h1>Oyun Sitem</h1>
+            <p>Geleceğin Oyun Dünyası</p>
+            <a href="#oyunlar" class="explore-btn">Oyunları Keşfet</a>
+        </div>
     </section>
 
     <div class="container" id="oyunlar">
-        <h2 style="font-size: 45px; color: #bc13fe; text-shadow: 0 0 15px #bc13fe; margin-bottom: 50px;">Oyunlar</h2>
+        <h2>Popüler Oyunlar</h2>
         
         <div class="games-grid">
             <div class="game-card">
@@ -174,34 +265,34 @@
 
     <div id="popup-chess" class="game-popup">
         <span class="close-btn" onclick="closeGame('chess')">&times;</span>
-        <h2 style="color: #bc13fe; margin-bottom: 20px;">Satranç Dünyası</h2>
+        <h2 style="color: #bc13fe; margin-bottom: 20px; font-size: 32px;">Satranç Dünyası</h2>
         <div id="chess-board"></div>
     </div>
 
     <div id="popup-tennis" class="game-popup">
         <span class="close-btn" onclick="closeGame('tennis')">&times;</span>
-        <h2 style="color: #39ff14; margin-bottom: 10px;">Tenis (Bota Karşı)</h2>
-        <div id="scoreArea" style="font-size: 24px; color: #fff; margin-bottom: 10px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div>
+        <h2 style="color: #39ff14; margin-bottom: 10px; font-size: 32px;">Tenis (Bota Karşı)</h2>
+        <div id="scoreArea" style="font-size: 24px; color: #fff; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div>
         <canvas id="pongCanvas" width="700" height="400"></canvas>
     </div>
 
     <div id="popup-click" class="game-popup">
         <span class="close-btn" onclick="closeGame('click')">&times;</span>
-        <h2 style="color: #00f2ff; margin-bottom: 20px;">Hız Testi</h2>
+        <h2 style="color: #00f2ff; margin-bottom: 20px; font-size: 32px;">Hız Testi</h2>
         <div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div>
         <p id="click-score" style="font-size: 24px; margin-top: 20px; color: #39ff14;"></p>
     </div>
 
     <div id="popup-memory" class="game-popup">
         <span class="close-btn" onclick="closeGame('memory')">&times;</span>
-        <h2 style="color: #ff9f43; margin-bottom: 20px;">Hafıza Kartı Eşleştirme</h2>
+        <h2 style="color: #ff9f43; margin-bottom: 20px; font-size: 32px;">Hafıza Kartı Eşleştirme</h2>
         <div id="memory-board"></div>
     </div>
 
     <div id="popup-snake" class="game-popup">
         <span class="close-btn" onclick="closeGame('snake')">&times;</span>
-        <h2 style="color: #ff9f43; margin-bottom: 10px;">Klasik Yılan Oyunu</h2>
-        <div style="font-size: 20px; margin-bottom: 10px;">Skor: <span id="sScore">0</span></div>
+        <h2 style="color: #ff9f43; margin-bottom: 10px; font-size: 32px;">Klasik Yılan Oyunu</h2>
+        <div style="font-size: 22px; margin-bottom: 15px;">Skor: <span id="sScore">0</span></div>
         <canvas id="snakeCanvas" width="400" height="400"></canvas>
     </div>
 
@@ -232,7 +323,7 @@
         }
         function closeGame(gameName) { document.getElementById('popup-' + gameName).style.display = 'none'; }
 
-        // --- YENİLENEN BUGSUZ SATRANÇ SİSTEMİ ---
+        // --- BUGSUZ SATRANÇ SİSTEMİ ---
         let boardState = [];
         let selectedSquare = null;
         function buildChessBoard() {
@@ -274,13 +365,11 @@
                     drawGrid();
                 }
             } else {
-                // Eğer seçili olan kutuya tekrar basarsa seçimi iptal et
                 if(selectedSquare.r === r && selectedSquare.c === c) {
                     selectedSquare = null;
                     drawGrid();
                     return;
                 }
-                // Başka bir taşa basarsa yeni taşı seç
                 if(boardState[r][c] !== '' && ((boardState[r][c] === boardState[r][c].toUpperCase() && boardState[selectedSquare.r][selectedSquare.c] === boardState[selectedSquare.r][selectedSquare.c].toUpperCase()) || (boardState[r][c] === boardState[r][c].toLowerCase() && boardState[selectedSquare.r][selectedSquare.c] === boardState[selectedSquare.r][selectedSquare.c].toLowerCase()))) {
                      selectedSquare = {r, c};
                      drawGrid();
@@ -383,7 +472,7 @@
             }
         }
 
-        // --- YILAN OYUNU SYSTEM ---
+        // --- YILAN OYUNU ---
         let snakeInterval;
         function startSnakeGame() {
             const canvas = document.getElementById('snakeCanvas');
@@ -395,7 +484,6 @@
             let score = 0;
             document.getElementById('sScore').textContent = score;
 
-            // Klavye yön dinleme
             document.onkeydown = (e) => {
                 if (e.key === 'ArrowLeft' && dx === 0) { dx = -boxSize; dy = 0; }
                 else if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -boxSize; }
@@ -407,10 +495,8 @@
             snakeInterval = setInterval(() => {
                 if(document.getElementById('popup-snake').style.display !== 'flex') { clearInterval(snakeInterval); return; }
                 
-                // Baş kısmı ilerletme
                 let head = {x: snake[0].x + dx, y: snake[0].y + dy};
                 
-                // Duvara çarpma veya kendine çarpma kontrolü
                 if(head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
                     alert("Oyun Bitti! Skorunuz: " + score);
                     startSnakeGame();
@@ -419,7 +505,6 @@
                 
                 snake.unshift(head);
                 
-                // Yem yeme durumu
                 if(head.x === food.x && head.y === food.y) {
                     score += 10;
                     document.getElementById('sScore').textContent = score;
@@ -431,8 +516,7 @@
                     snake.pop();
                 }
 
-                // Ekrana çizme
-                ctx.fillStyle = '#111'; ctx.fillRect(0, 0, 400, 400);
+                ctx.fillStyle = '#0d0d13'; ctx.fillRect(0, 0, 400, 400);
                 ctx.fillStyle = '#ff9f43'; snake.forEach(s => ctx.fillRect(s.x, s.y, boxSize-2, boxSize-2));
                 ctx.fillStyle = '#ff4757'; ctx.fillRect(food.x, food.y, boxSize-2, boxSize-2);
 
