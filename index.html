@@ -123,7 +123,7 @@
         .store-btn:hover:not(:disabled) { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
         .store-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-        /* 4. OYUN PENCERELERİ */
+        /* 4. OYUN PENCERELERİ VE POPUPLAR */
         .game-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
@@ -152,6 +152,20 @@
 
         /* Yılan */
         canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; box-shadow: 0 0 25px rgba(255, 159, 67, 0.4); }
+
+        /* --- ENTEGRE EDİLEN YENİ STRATEJİ OYUNU STİLLERİ --- */
+        .conquest-container { width: 100%; max-width: 700px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; box-sizing: border-box; color: #fff; }
+        .cq-setup-screen { text-align: center; padding: 20px; }
+        .cq-select, .cq-btn { padding: 10px 20px; font-size: 16px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; text-transform: uppercase; }
+        .cq-btn:hover { background: #39ff14; box-shadow: 0 0 15px #39ff14; }
+        .cq-btn-danger { background: #ff4757; color: #fff; }
+        .cq-btn-danger:hover { background: #ff6b81; box-shadow: 0 0 15px #ff4757; }
+        .cq-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .cq-card { background: #0b0c10; padding: 10px; border-radius: 8px; border-left: 3px solid #00f2ff; text-align: center; }
+        .cq-card h4 { margin: 0 0 4px 0; font-size: 11px; color: #bc13fe; text-transform: uppercase; }
+        .cq-card p { margin: 0; font-size: 15px; font-weight: bold; }
+        .cq-row { display: flex; justify-content: space-between; align-items: center; background: #141420; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .cq-log { background: #000; border: 1px solid #333; height: 90px; overflow-y: auto; padding: 8px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #39ff14; text-align: left; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -200,8 +214,43 @@
     <div id="popup-memory" class="game-popup"><span class="close-btn" onclick="closeGame('memory')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 20px; font-size: 32px;">Hafıza Kartları</h2><div id="memory-board"></div></div>
     <div id="popup-snake" class="game-popup"><span class="close-btn" onclick="closeGame('snake')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 10px; font-size: 32px;">Yılan Oyunu</h2><div style="font-size: 22px; margin-bottom: 15px;">Skor: <span id="sScore">0</span></div><canvas id="snakeCanvas" width="400" height="400"></canvas></div>
 
+    <div id="popup-conquest" class="game-popup">
+        <span class="close-btn" onclick="closeGame('conquest')">&times;</span>
+        <div class="conquest-container">
+            <h3 style="margin-top:0; color:#00f2ff; text-align:center; font-size:24px;">⚔️ İMPARATORLUK FETHİ</h3>
+            
+            <div id="cq-setup" class="cq-setup-screen">
+                <p>Hükmetmek İstediğin İmparatorluğu Seç:</p>
+                <select id="cq-empire-select" class="cq-select">
+                    <option value="Valoria">Valoria Krallığı (Ekonomi Bonusu)</option>
+                    <option value="Shadowfang">Shadowfang Klanı (Askeri Bonus)</option>
+                    <option value="Aethelgard">Aethelgard Kutsal Düzeni (Teknoloji Bonusu)</option>
+                </select><br><br>
+                <button class="cq-btn" onclick="startConquestGame()">Savaşı Başlat</button>
+            </div>
+
+            <div id="cq-board" style="display:none;">
+                <h4 id="cq-player-title" style="text-align:center; margin:5px 0; color:#39ff14;"></h4>
+                <div class="cq-dashboard">
+                    <div class="cq-card"><h4>Toprak</h4><p id="cq-land">%15</p></div>
+                    <div class="cq-card"><h4>Hazine</h4><p id="cq-gold">500 💰</p></div>
+                    <div class="cq-card"><h4>Ordu</h4><p id="cq-army">100 ⚔️</p></div>
+                    <div class="cq-card"><h4>Teknoloji</h4><p id="cq-tech">T1 🔬</p></div>
+                </div>
+                <div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">
+                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
+                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqUpgrade()">Geliş (-300💰)</button>
+                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqTax()">Vergi Topla 💰</button>
+                </div>
+                <div style="font-size:14px; border-bottom:1px solid #333; padding-bottom:3px; color:#00f2ff; font-weight:bold;">HEDEFLER:</div>
+                <div id="cq-enemies" style="max-height:140px; overflow-y:auto; margin-top:5px;"></div>
+                <div class="cq-log" id="cq-log-box">> Emirlerinizi bekliyoruz...</div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- SABİT (SİTEDE DURAN) OYUNLAR ---
+        // --- OYUN VERİ YAPILARI ---
         const SABIT_OYUNLAR = {
             chess: { id: 'chess', logo: '👑', title: 'Satranç', desc: 'Gelişmiş taş seçme ve yeme mekanizmalı, tamamen düzeltilmiş kararlı satranç.' },
             tennis: { id: 'tennis', logo: '🎾', title: 'Tenis', desc: 'Yapay zekaya sahip gelişmiş bota karşı reflekslerini yarıştır.' },
@@ -210,21 +259,24 @@
             snake: { id: 'snake', logo: '🐍', title: 'Yılan Oyunu', desc: 'Yemleri topla, kendine veya duvarlara çarpmadan en uzun boya ulaş.' }
         };
 
-        // --- MAĞAZAYA EKLENECEK OYUNLAR (SEN SÖYLEDİKÇE BURAYI DOLDURACAĞIZ) ---
+        // --- MAĞAZADAKİ YENİ OYUNLAR (BURAYA ENTEGRE EDİLDİ) ---
         const MAĞAZA_OYUNLARI = {
-            // Örnek şablon: sen söyledikçe buraya oyunları tanımlayacağız.
+            conquest: { 
+                id: 'conquest', 
+                logo: '⚔️', 
+                title: 'İmparatorluk Fethi', 
+                desc: 'Kendi hayali imparatorluğunu kur, ekonomini yönet, teknolojini geliştir ve dünyayı ele geçir!' 
+            }
         };
 
-        // Mağazadan indirilen ve sonradan ana ekrana eklenen oyunların hafıza takibi
         let magazadanYuklenenler = JSON.parse(localStorage.getItem('magazadanYuklenenler')) || [];
 
         function updateUIVisuals() {
             const mainArea = document.getElementById('main-games-area');
             const storeArea = document.getElementById('store-games-area');
-            
             mainArea.innerHTML = '';
             
-            // Önce sitenin kendi orijinal sabit oyunlarını listeliyoruz (Sadece "Oyna" butonu var)
+            // Orijinal sabit oyunlar
             Object.keys(SABIT_OYUNLAR).forEach(gameId => {
                 const game = SABIT_OYUNLAR[gameId];
                 mainArea.innerHTML += `
@@ -236,7 +288,7 @@
                     </div>`;
             });
 
-            // Sonra mağazadan sonradan yüklenen yeni oyunları ekliyoruz
+            // Mağazadan sonradan yüklenenler
             magazadanYuklenenler.forEach(gameId => {
                 const game = MAĞAZA_OYUNLARI[gameId];
                 if(game) {
@@ -250,25 +302,21 @@
                 }
             });
 
-            // Mağaza alanını çiziyoruz
+            // Mağaza Alanı
             storeArea.innerHTML = '';
-            if(Object.keys(MAĞAZA_OYUNLARI).length === 0) {
-                storeArea.innerHTML = `<p style="color: #00f2ff; font-size: 18px; grid-column: 1/-1;">Şu an mağaza boş. Bana yüklemek istediğin oyunu söyle, hemen buraya ekleyelim!</p>`;
-            } else {
-                Object.keys(MAĞAZA_OYUNLARI).forEach(gameId => {
-                    const game = MAĞAZA_OYUNLARI[gameId];
-                    const isInstalled = magazadanYuklenenler.includes(gameId);
-                    storeArea.innerHTML += `
-                        <div class="game-card" style="border-color: #00f2ff;">
-                            <div class="game-logo" style="border-color: #00f2ff; box-shadow: 0 0 10px rgba(0,242,255,0.3);">${game.logo}</div>
-                            <h3>${game.title}</h3>
-                            <p>${game.desc}</p>
-                            <button class="store-btn" id="btn-${game.id}" ${isInstalled ? 'disabled' : ''} onclick="installAndDownload('${gameId}')">
-                                ${isInstalled ? 'Yüklendi' : 'Yükle'}
-                            </button>
-                        </div>`;
-                });
-            }
+            Object.keys(MAĞAZA_OYUNLARI).forEach(gameId => {
+                const game = MAĞAZA_OYUNLARI[gameId];
+                const isInstalled = magazadanYuklenenler.includes(gameId);
+                storeArea.innerHTML += `
+                    <div class="game-card" style="border-color: #00f2ff;">
+                        <div class="game-logo" style="border-color: #00f2ff; box-shadow: 0 0 10px rgba(0,242,255,0.3);">${game.logo}</div>
+                        <h3>${game.title}</h3>
+                        <p>${game.desc}</p>
+                        <button class="store-btn" id="btn-${game.id}" ${isInstalled ? 'disabled' : ''} onclick="installAndDownload('${gameId}')">
+                            ${isInstalled ? 'Yüklendi' : 'Yükle'}
+                        </button>
+                    </div>`;
+            });
         }
 
         function installAndDownload(gameId) {
@@ -276,20 +324,15 @@
                 magazadanYuklenenler.push(gameId);
                 localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler));
                 updateUIVisuals();
-                downloadGameStandalone(gameId); // Telefonuna paketi otomatik indirir
+                downloadGameStandalone(gameId); // Telefona dosyayı indirir
             }
         }
 
-        // MAĞAZADAKİ YENİ OYUNLARIN TELEFONA İNDİRİLME MOTORU
+        // MAĞAZADAKİ OYUNU TELEFONA İNDİRME MOTORU
         function downloadGameStandalone(gameId) {
             const game = MAĞAZA_OYUNLARI[gameId];
             if(!game) return;
-            
-            let gameHTML = `<h2 style="text-align:center;">${game.title}</h2><p style="text-align:center;color:#aaa;">Mağazadan başarıyla telefonunuza yüklendi!</p>`;
-            let gameScript = `console.log('${game.title} çalışıyor...');`;
-
-            const standaloneContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${game.title}</title><style>body { background-color: #05050a; color: white; font-family: sans-serif; padding: 20px; margin: 0; }</style></head><body>${gameHTML}<script>${gameScript}<\/script></body></html>`;
-
+            const standaloneContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${game.title}</title><style>body{background:#0b0c10;color:white;font-family:sans-serif;padding:30px;text-align:center;}</style></head><body><h2>${game.title} ${game.logo}</h2><p>Bu oyun sitemizden telefonunuza başarıyla indirilmiştir!</p></body></html>`;
             const blob = new Blob([standaloneContent], { type: "text/html" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -299,22 +342,6 @@
 
         updateUIVisuals();
 
-        // --- INTRO ANİMASYONU ---
-        setTimeout(() => {
-            document.getElementById('portal-element').style.transform = 'scale(0.4)';
-            document.getElementById('characters-element').style.display = 'block';
-        }, 1500);
-        setTimeout(() => {
-            document.getElementById('portal-element').style.display = 'none';
-            document.getElementById('characters-element').style.display = 'none';
-            document.getElementById('tekkur-yazisi').style.display = 'block';
-        }, 3200);
-        setTimeout(() => {
-            document.getElementById('intro-container').style.transition = 'opacity 0.8s';
-            document.getElementById('intro-container').style.opacity = '0';
-            setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; }, 800);
-        }, 6000);
-
         // --- PANEL KONTROLLERİ ---
         function openGame(gameName) {
             document.getElementById('popup-' + gameName).style.display = 'flex';
@@ -322,10 +349,106 @@
             if(gameName === 'tennis') startTennisGame();
             if(gameName === 'memory') startMemoryGame();
             if(gameName === 'snake') startSnakeGame();
+            if(gameName === 'conquest') resetConquestUI();
         }
         function closeGame(gameName) { document.getElementById('popup-' + gameName).style.display = 'none'; }
 
-        // --- SATRANÇ SİSTEMİ ---
+        // --- ENTEGRE EDİLEN STRATEJİ OYUNU MOTORU ---
+        let cqGold, cqArmy, cqTech, cqLand, cqPlayerEmpire;
+        let cqEnemies = [];
+        
+        function resetConquestUI() {
+            document.getElementById('cq-setup').style.display = 'block';
+            document.getElementById('cq-board').style.display = 'none';
+        }
+
+        function startConquestGame() {
+            cqPlayerEmpire = document.getElementById('cq-empire-select').value;
+            cqGold = 500; cqArmy = 100; cqTech = 1; cqLand = 15;
+            if(cqPlayerEmpire === "Valoria") cqGold = 800;
+            if(cqPlayerEmpire === "Shadowfang") cqArmy = 170;
+            if(cqPlayerEmpire === "Aethelgard") cqTech = 2;
+
+            cqEnemies = [
+                { id: "necro", name: "Necroshane Laneti", land: 25, army: 110, logo: "💀" },
+                { id: "solaria", name: "Solaria İmparatorluğu", land: 20, army: 140, logo: "☀️" },
+                { id: "frost", name: "Frostmaul Hanedanı", land: 20, army: 90, logo: "❄️" },
+                { id: "void", name: "Voidborn Konseyi", land: 20, army: 160, logo: "🔮" }
+            ];
+
+            document.getElementById('cq-player-title').textContent = cqPlayerEmpire + " İmparatorluğu";
+            document.getElementById('cq-setup').style.display = 'none';
+            document.getElementById('cq-board').style.display = 'block';
+            document.getElementById('cq-log-box').innerHTML = "> Tahta geçtiniz! Hedef dünyayı fethetmek.";
+            cqUpdateUI();
+        }
+
+        function cqLog(msg) {
+            const b = document.getElementById('cq-log-box');
+            b.innerHTML += "<br>> " + msg; b.scrollTop = b.scrollHeight;
+        }
+
+        function cqUpdateUI() {
+            document.getElementById('cq-gold').textContent = cqGold + " 💰";
+            document.getElementById('cq-army').textContent = cqArmy + " ⚔️";
+            document.getElementById('cq-tech').textContent = "T" + cqTech + " 🔬";
+            document.getElementById('cq-land').textContent = "%" + cqLand;
+
+            if(cqLand >= 100) { alert("TEBRİKLER! Tüm dünyayı fethettiniz!"); resetConquestUI(); return; }
+
+            const area = document.getElementById('cq-enemies'); area.innerHTML = '';
+            cqEnemies.forEach(e => {
+                if(e.land > 0) {
+                    area.innerHTML += `
+                        <div class="cq-row">
+                            <div style="font-size:12px;">${e.logo} <b>${e.name}</b><br><span style="color:#aaa;">Toprak: %${e.land} | Güç: ${e.army}</span></div>
+                            <button class="cq-btn cq-btn-danger" style="font-size:11px; padding:4px 10px;" onclick="cqAttack('${e.id}')">Saldır</button>
+                        </div>`;
+                }
+            });
+        }
+
+        function cqRecruit() {
+            if(cqGold >= 100) { cqGold -= 100; cqArmy += (40 + cqTech*15); cqLog("Ordu güçlendirildi."); cqUpdateUI(); }
+            else cqLog("Yetersiz altın!");
+        }
+        function cqUpgrade() {
+            if(cqGold >= 300) { cqGold -= 300; cqTech++; cqLog("Teknoloji T" + cqTech + " oldu."); cqUpdateUI(); }
+            else cqLog("Gelişmek için 300 altın gerek!");
+        }
+        function cqTax() {
+            let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain;
+            cqLog("Vergi toplandı: +" + gain + " 💰");
+            cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); });
+            cqUpdateUI();
+        }
+
+        function cqAttack(id) {
+            let e = cqEnemies.find(x => x.id === id);
+            if(!e || cqArmy <= 0) return;
+            let pPower = cqArmy * (1 + cqTech*0.2) * (Math.random()*0.4 + 0.8);
+            let ePower = e.army * (Math.random()*0.4 + 0.8);
+
+            if(pPower > ePower) {
+                let cap = Math.min(e.land, Math.floor(Math.random()*6)+5);
+                e.land -= cap; cqLand += cap;
+                let loss = Math.floor(cqArmy * 0.25); cqArmy -= loss;
+                e.army = Math.floor(e.army * 0.3); cqGold += (cap * 30);
+                cqLog(`ZAFER! %${cap} toprak alındı. ${loss} asker kaybettik.`);
+                if(e.land <= 0) cqLog(`${e.name} yıkıldı!`);
+            } else {
+                let loss = Math.floor(cqArmy * 0.5); cqArmy -= loss;
+                cqLog(`YENİLGİ! Savunma güçlü çıktı, ordunun yarısı (${loss}) yok oldu.`);
+            }
+            cqUpdateUI();
+        }
+
+        // --- DİĞER ESKİ OYUNLARIN MOTORLARI (SATRANÇ, TENİS, YILAN VB.) ---
+        setTimeout(() => { document.getElementById('portal-element').style.transform = 'scale(0.4)'; document.getElementById('characters-element').style.display = 'block'; }, 1500);
+        setTimeout(() => { document.getElementById('portal-element').style.display = 'none'; document.getElementById('characters-element').style.display = 'none'; document.getElementById('tekkur-yazisi').style.display = 'block'; }, 3200);
+        setTimeout(() => { document.getElementById('intro-container').style.transition = 'opacity 0.8s'; document.getElementById('intro-container').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; }, 800); }, 6000);
+
+        // Satranç
         let boardState = []; let selectedSquare = null;
         function buildChessBoard() {
             selectedSquare = null;
@@ -350,21 +473,16 @@
             }
         }
         function handleSquareClick(r, c) {
-            if (selectedSquare === null) {
-                if (boardState[r][c] !== '') { selectedSquare = {r, c}; drawGrid(); }
-            } else {
-                if(selectedSquare.r === r && selectedSquare.c === c) { selectedSquare = null; drawGrid(); return; }
-                boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; boardState[selectedSquare.r][selectedSquare.c] = ''; selectedSquare = null; drawGrid();
-            }
+            if (selectedSquare === null) { if (boardState[r][c] !== '') { selectedSquare = {r, c}; drawGrid(); } } 
+            else { if(selectedSquare.r === r && selectedSquare.c === c) { selectedSquare = null; drawGrid(); return; } boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; boardState[selectedSquare.r][selectedSquare.c] = ''; selectedSquare = null; drawGrid(); }
         }
 
-        // --- TENİS (BOTLU PONG) ---
+        // Tenis
         let pongInterval; let playerScore = 0, botScore = 0;
         function startTennisGame() {
             const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
             let ballX = 350, ballY = 200, speedX = 5, speedY = 5; let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
             canvas.onmousemove = (e) => { let rect = canvas.getBoundingClientRect(); pY = e.clientY - rect.top - pHeight / 2; };
-            canvas.ontouchmove = (e) => { let rect = canvas.getBoundingClientRect(); pY = e.touches[0].clientY - rect.top - pHeight / 2; e.preventDefault(); };
             clearInterval(pongInterval);
             pongInterval = setInterval(() => {
                 if(document.getElementById('popup-tennis').style.display !== 'flex') { clearInterval(pongInterval); return; }
@@ -382,33 +500,26 @@
         }
         function updateScores() { document.getElementById('pScore').textContent = playerScore; document.getElementById('bScore').textContent = botScore; }
 
-        // --- RENKLİ TIKLAMA ---
+        // Tıklama
         let reflexTime = 0, isWaiting = false;
         function handleClickBox() {
             const box = document.getElementById('click-box'); const scoreText = document.getElementById('click-score');
-            if(!isWaiting) {
-                box.textContent = 'BEKLE...'; box.style.backgroundColor = 'red'; isWaiting = true; scoreText.textContent = '';
-                setTimeout(() => { box.style.backgroundColor = '#39ff14'; box.style.color = '#000'; box.textContent = 'TIKLA!'; reflexTime = Date.now(); }, 1500 + Math.random() * 2500);
-            } else if(reflexTime > 0) {
-                scoreText.textContent = `Hız Skorun: ${Date.now() - reflexTime} ms`; box.textContent = 'YENİDEN BAŞLA'; box.style.backgroundColor = 'transparent'; box.style.color = '#fff'; reflexTime = 0; isWaiting = false;
-            }
+            if(!isWaiting) { box.textContent = 'BEKLE...'; box.style.backgroundColor = 'red'; isWaiting = true; scoreText.textContent = ''; setTimeout(() => { box.style.backgroundColor = '#39ff14'; box.style.color = '#000'; box.textContent = 'TIKLA!'; reflexTime = Date.now(); }, 1500 + Math.random() * 2500); } 
+            else if(reflexTime > 0) { scoreText.textContent = `Hız Skorun: ${Date.now() - reflexTime} ms`; box.textContent = 'YENİDEN BAŞLA'; box.style.backgroundColor = 'transparent'; box.style.color = '#fff'; reflexTime = 0; isWaiting = false; }
         }
 
-        // --- HAFIZA OYUNU ---
+        // Hafıza
         let cards = ['🔥','🔥','⚡','⚡','👑','👑','💎','💎','🍎','🍎','🚗','🚗','🎈','🎈','👾','👾']; let choice1 = null, choice2 = null;
         function startMemoryGame() {
-            const mBoard = document.getElementById('memory-board'); mBoard.innerHTML = ''; choice1 = null; choice2 = null;
-            cards.sort(() => 0.5 - Math.random());
+            const mBoard = document.getElementById('memory-board'); mBoard.innerHTML = ''; choice1 = null; choice2 = null; cards.sort(() => 0.5 - Math.random());
             cards.forEach((val, i) => { const c = document.createElement('div'); c.className = 'card'; c.dataset.icon = val; c.dataset.id = i; c.onclick = () => flipCard(c); mBoard.appendChild(c); });
         }
         function flipCard(c) {
-            if(c.classList.contains('flipped') || choice2) return;
-            c.textContent = c.dataset.icon; c.classList.add('flipped');
-            if(!choice1) choice1 = c;
-            else { choice2 = c; if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; } else { setTimeout(() => { choice1.textContent = ''; choice2.textContent = ''; choice1.classList.remove('flipped'); choice2.classList.remove('flipped'); choice1 = null; choice2 = null; }, 800); } }
+            if(c.classList.contains('flipped') || choice2) return; c.textContent = c.dataset.icon; c.classList.add('flipped');
+            if(!choice1) choice1 = c; else { choice2 = c; if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; } else { setTimeout(() => { choice1.textContent = ''; choice2.textContent = ''; choice1.classList.remove('flipped'); choice2.classList.remove('flipped'); choice1 = null; choice2 = null; }, 800); } }
         }
 
-        // --- YILAN OYUNU ---
+        // Yılan
         let snakeInterval;
         function startSnakeGame() {
             const canvas = document.getElementById('snakeCanvas'); const ctx = canvas.getContext('2d');
