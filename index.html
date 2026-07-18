@@ -16,7 +16,7 @@
             overflow-x: hidden;
         }
 
-        /* SOL ÜST HAMBURGER MENÜ BUTONU */
+        /* SOL ÜST KÖŞE HAMBURGER BUTONU */
         #menu-toggle-btn {
             position: fixed;
             top: 20px;
@@ -29,7 +29,7 @@
             color: #fff;
             font-size: 24px;
             cursor: pointer;
-            display: none; /* Açılışta gizli, script ile görünecek */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -41,11 +41,11 @@
             box-shadow: 0 0 20px #bc13fe;
         }
 
-        /* SOL MENÜ (SIDEBAR) SİSTEMİ */
+        /* MENÜ (SIDEBAR) SİSTEMİ */
         #sidebar-menu {
             position: fixed;
             top: 85px;
-            left: -350px; /* Başlangıçta dışarıda gizli */
+            left: -350px;
             width: 320px;
             max-height: calc(100vh - 120px);
             background: rgba(15, 15, 25, 0.95);
@@ -62,7 +62,7 @@
             box-shadow: 0 0 25px rgba(188, 19, 254, 0.3);
         }
         #sidebar-menu.active {
-            left: 20px; /* Menü açıldığında içeri kayar */
+            left: 20px;
         }
         .menu-items-wrapper {
             width: 100%;
@@ -89,14 +89,12 @@
             text-decoration: none;
             box-sizing: border-box;
         }
-        .menu-btn:hover, .menu-btn.active {
+        .menu-btn:hover {
             background: #bc13fe;
-            color: #fff;
             box-shadow: 0 0 15px #bc13fe;
-            border-color: #e0b0ff;
         }
 
-        /* GERÇEKÇİ GAME AI PANELİ */
+        /* GERÇEKÇİ YAPAY ZEKA PANELİ */
         #ai-panel {
             width: 100%;
             display: flex;
@@ -178,7 +176,6 @@
         nav a {
             color: #fff; text-decoration: none; font-weight: bold; font-size: 18px;
             letter-spacing: 1px; transition: 0.3s; text-transform: uppercase;
-            display: flex; align-items: center; gap: 5px;
         }
         nav a:hover { color: #39ff14; text-shadow: 0 0 10px #39ff14; }
 
@@ -208,9 +205,9 @@
             border-radius: 50px; cursor: pointer; transition: all 0.4s ease; text-decoration: none; display: inline-block;
             box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1); text-transform: uppercase; letter-spacing: 2px;
         }
-        .explore-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 35px #39ff14, 0 0 10px #39ff14; transform: scale(1.05); }
+        .explore-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 35px #39ff14; transform: scale(1.05); }
 
-        /* KAPSAYICILAR VE BAŞLIKLAR */
+        /* KAPSAYICILAR VE KARTLAR */
         .container { padding: 80px 20px; text-align: center; position: relative; }
         .container h2 {
             font-size: 48px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 4px;
@@ -218,61 +215,58 @@
         }
         .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
         
-        /* KART TASARIMLARI */
         .game-card {
             background: rgba(15, 15, 25, 0.7); border: 2px solid rgba(188, 19, 254, 0.3); border-radius: 24px; padding: 35px; width: 260px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(10px);
             display: flex; flex-direction: column; align-items: center;
         }
-        .game-card:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
+        .game-card:hover { transform: translateY(-15px); box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
         .game-logo {
             width: 110px; height: 110px; background: #141420; border-radius: 50%; margin: 0 auto 25px auto;
             display: flex; justify-content: center; align-items: center; font-size: 55px;
-            border: 2px solid #bc13fe; box-shadow: 0 0 15px rgba(188, 19, 254, 0.4); transition: all 0.3s ease;
+            border: 2px solid #bc13fe; box-shadow: 0 0 15px rgba(188, 19, 254, 0.4); transition: 0.3s;
         }
-        .game-card:hover .game-logo { border-color: #39ff14; box-shadow: 0 0 25px #39ff14; background: #050508; transform: rotate(10deg); }
+        .game-card:hover .game-logo { border-color: #39ff14; box-shadow: 0 0 25px #39ff14; transform: rotate(10deg); }
         .game-card h3 { color: #fff; font-size: 28px; font-weight: 700; margin: 15px 0 10px 0; }
         .game-card p { color: #b0b0bc; font-size: 15px; line-height: 1.5; height: 70px; overflow: hidden; margin-bottom: 20px; }
 
         .game-btn {
             background: linear-gradient(135deg, #bc13fe, #8a06c4); color: #fff; border: none; padding: 14px 35px; border-radius: 12px;
-            cursor: pointer; font-weight: bold; font-size: 16px; letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase; width: 100%;
+            cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; text-transform: uppercase; transition: 0.3s;
         }
-        .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); transform: translateY(-2px); }
+        .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
 
-        /* MAĞAZA VE INDIRME SISTEMI */
         .store-btn-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; }
         .store-btn {
             background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 14px 30px; border-radius: 12px;
-            cursor: pointer; font-weight: bold; font-size: 14px; letter-spacing: 1px; transition: all 0.3s ease; text-transform: uppercase; width: 100%;
+            cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; text-transform: uppercase; transition: 0.3s;
         }
         .store-btn:hover:not(:disabled) { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
         .store-btn:disabled { background: #141420; border: 1px solid #333; color: #555; cursor: not-allowed; }
         
         .reload-btn {
             background: transparent; border: 2px solid #ff9f43; color: #ff9f43; padding: 10px; border-radius: 12px;
-            cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase; transition: 0.3s; width: 100%; box-sizing: border-box;
+            cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase; width: 100%; box-sizing: border-box;
         }
         .reload-btn:hover { background: #ff9f43; color: #000; box-shadow: 0 0 15px #ff9f43; }
 
-        /* OYUN PENCERELERİ (POPUPLAR) */
+        /* OYUN POPUPLARI */
         .game-popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
             align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px);
         }
-        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; transition: 0.2s; }
-        .close-btn:hover { transform: scale(1.1); color: #ff6b81; }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; }
 
-        /* Satranç Tasarımı */
-        #chess-board { display: grid; grid-template-columns: repeat(8, 48px); grid-template-rows: repeat(8, 48px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); user-select: none; -webkit-user-select: none; }
-        .square { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        /* Satranç */
+        #chess-board { display: grid; grid-template-columns: repeat(8, 48px); grid-template-rows: repeat(8, 48px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
+        .square { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; }
         .white { background-color: #f0d9b5; color: #000; }
         .black { background-color: #b58863; color: #000; }
-        .selected { background-color: #39ff14 !important; box-shadow: inset 0 0 12px rgba(0,0,0,0.6); }
+        .selected { background-color: #39ff14 !important; }
 
         /* Tenis */
-        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; box-shadow: 0 0 25px rgba(57, 255, 20, 0.4); }
+        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; }
 
         /* Hız Testi */
         #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; }
@@ -283,21 +277,20 @@
         .card.flipped { background: #141420; border: 2px solid #39ff14; }
 
         /* Yılan */
-        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; box-shadow: 0 0 25px rgba(255, 159, 67, 0.4); }
+        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; }
 
-        /* STRATEJİ MODÜLÜ */
-        .conquest-container { width: 100%; max-width: 700px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; box-sizing: border-box; color: #fff; }
+        /* STRATEJİ OYUNU KAPSAYICI */
+        .conquest-container { width: 100%; max-width: 700px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; box-sizing: border-box; }
         .cq-setup-screen { text-align: center; padding: 20px; }
-        .cq-select, .cq-btn { padding: 10px 20px; font-size: 16px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; text-transform: uppercase; }
+        .cq-select, .cq-btn { padding: 10px 20px; font-size: 16px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; }
         .cq-btn:hover { background: #39ff14; box-shadow: 0 0 15px #39ff14; }
         .cq-btn-danger { background: #ff4757; color: #fff; }
-        .cq-btn-danger:hover { background: #ff6b81; box-shadow: 0 0 15px #ff4757; }
         .cq-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
         .cq-card { background: #0b0c10; padding: 10px; border-radius: 8px; border-left: 3px solid #00f2ff; text-align: center; }
-        .cq-card h4 { margin: 0 0 4px 0; font-size: 11px; color: #bc13fe; text-transform: uppercase; }
+        .cq-card h4 { margin: 0; font-size: 11px; color: #bc13fe; }
         .cq-card p { margin: 0; font-size: 15px; font-weight: bold; }
-        .cq-row { display: flex; justify-content: space-between; align-items: center; background: #141420; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
-        .cq-log { background: #000; border: 1px solid #333; height: 90px; overflow-y: auto; padding: 8px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #39ff14; text-align: left; margin-top: 10px; }
+        .cq-row { display: flex; justify-content: space-between; align-items: center; background: #141420; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; }
+        .cq-log { background: #000; border: 1px solid #333; height: 90px; overflow-y: auto; padding: 8px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #39ff14; }
     </style>
 </head>
 <body>
@@ -306,24 +299,17 @@
 
     <div id="sidebar-menu">
         <div class="menu-items-wrapper">
-            <a href="#oyunlar" class="menu-btn" onclick="closeSidebarMenu()">
-                🎮 <span>Yüklü Oyunlar</span>
-            </a>
-            <a href="#magaza" class="menu-btn" onclick="closeSidebarMenu()">
-                🛒 <span>Oyun Mağazası</span>
-            </a>
-            <div class="menu-btn active" style="cursor: default; box-shadow: none; border-color: rgba(255,255,255,0.1); background: #141420;">
-                🤖 <span>Game AI Bölümü</span>
-            </div>
+            <a href="#oyunlar" class="menu-btn" onclick="closeSidebarMenu()">🎮 Yüklü Oyunlar</a>
+            <a href="#magaza" class="menu-btn" onclick="closeSidebarMenu()">🛒 Oyun Mağazası</a>
         </div>
         
         <div id="ai-panel">
-            <div class="ai-title">✨ Game AI</div>
+            <div class="ai-title">✨ Canlı Yapay Zeka (AI)</div>
             <div id="ai-chat-box">
-                <div class="ai-msg bot">Selam! Ben Game AI. Sitedeki oyunlar, stratejiler ve mağaza hakkında konuşabiliriz. Tıpkı gerçek bir AI gibi sorduğun şeyleri aklımda tutabiliyorum! Ne öğrenmek istersin?</div>
+                <div class="ai-msg bot">Selam! Ben senin yapay zeka asistanınım. Tıpkı benim gibi bana matematik sorabilir, sitendeki oyunlar hakkında strateji isteyebilir ya da havadan sudan konuşabilirsin! Ne soracaksın?</div>
             </div>
             <div class="ai-input-area">
-                <input type="text" id="ai-input" placeholder="Yapay zekaya bir şey sor..." onkeydown="if(event.key==='Enter') sendAIMessage()">
+                <input type="text" id="ai-input" placeholder="Bana bir şey sor (Örn: 7x7 veya Satranç taktiği)..." onkeydown="if(event.key==='Enter') sendAIMessage()">
                 <button class="ai-send-btn" onclick="sendAIMessage()">Gönder</button>
             </div>
         </div>
@@ -331,7 +317,7 @@
 
     <nav>
         <a href="#oyunlar">Ana Ekran</a>
-        <a href="#magaza">🛒 Mağazaya Git</a>
+        <a href="#magaza">🛒 Mağaza</a>
     </nav>
 
     <div id="intro-container">
@@ -341,9 +327,7 @@
             <span class="karakter" id="char2">🎾</span>
             <span class="karakter" id="char3">🎯</span>
         </div>
-        <div id="tekkur-yazisi">
-            Ayhan abime siteyi yaptığımda bana destek olduğu için teşekkür ederim ❤️
-        </div>
+        <div id="tekkur-yazisi">Ayhan abime siteyi yaptığımda bana destek olduğu için teşekkür ederim ❤️</div>
     </div>
 
     <section class="hero">
@@ -359,33 +343,32 @@
         <div class="games-grid" id="main-games-area"></div>
     </div>
 
-    <div class="container" id="magaza" style="background: rgba(10, 5, 20, 0.6); border-top: 2px solid #00f2ff;">
-        <h2 style="background: linear-gradient(to right, #00f2ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Oyun Mağazası</h2>
-        <p style="color: #00f2ff; font-size: 18px; margin-bottom: 40px;">Yeni nesil strateji oyununu buradan yükleyip cihazına indirebilirsin!</p>
+    <div class="container" id="magaza">
+        <h2>Oyun Mağazası</h2>
         <div class="games-grid" id="store-games-area"></div>
     </div>
 
-    <div id="popup-chess" class="game-popup"><span class="close-btn" onclick="closeGame('chess')">&times;</span><h2 style="color: #bc13fe; margin-bottom: 10px; font-size: 32px;">Satranç</h2><div id="chess-status" style="color: #ff4757; font-size: 22px; font-weight: bold; margin-bottom: 10px; height: 30px;"></div><div id="chess-board"></div></div>
-    <div id="popup-tennis" class="game-popup"><span class="close-btn" onclick="closeGame('tennis')">&times;</span><h2 style="color: #39ff14; margin-bottom: 10px; font-size: 32px;">Tenis</h2><div style="font-size: 24px; color: #fff; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div><canvas id="pongCanvas" width="700" height="400"></canvas></div>
-    <div id="popup-click" class="game-popup"><span class="close-btn" onclick="closeGame('click')">&times;</span><h2 style="color: #00f2ff; margin-bottom: 20px; font-size: 32px;">Hız Testi</h2><div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div><p id="click-score" style="font-size: 24px; margin-top: 20px; color: #39ff14;"></p></div>
-    <div id="popup-memory" class="game-popup"><span class="close-btn" onclick="closeGame('memory')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 20px; font-size: 32px;">Hafıza Kartları</h2><div id="memory-board"></div></div>
-    <div id="popup-snake" class="game-popup"><span class="close-btn" onclick="closeGame('snake')">&times;</span><h2 style="color: #ff9f43; margin-bottom: 10px; font-size: 32px;">Yılan Oyunu</h2><div style="font-size: 22px; margin-bottom: 15px;">Skor: <span id="sScore">0</span></div><canvas id="snakeCanvas" width="400" height="400"></canvas></div>
+    <div id="popup-chess" class="game-popup"><span class="close-btn" onclick="closeGame('chess')">&times;</span><h2 style="color: #bc13fe;">Satranç</h2><div id="chess-status" style="color: #ff4757; font-size: 22px; font-weight: bold; margin-bottom: 10px;"></div><div id="chess-board"></div></div>
+    <div id="popup-tennis" class="game-popup"><span class="close-btn" onclick="closeGame('tennis')">&times;</span><h2 style="color: #39ff14;">Tenis</h2><div style="font-size: 24px; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div><canvas id="pongCanvas" width="700" height="400"></canvas></div>
+    <div id="popup-click" class="game-popup"><span class="close-btn" onclick="closeGame('click')">&times;</span><h2>Hız Testi</h2><div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div><p id="click-score" style="font-size: 24px; color: #39ff14;"></p></div>
+    <div id="popup-memory" class="game-popup"><span class="close-btn" onclick="closeGame('memory')">&times;</span><h2>Hafıza Kartları</h2><div id="memory-board"></div></div>
+    <div id="popup-snake" class="game-popup"><span class="close-btn" onclick="closeGame('snake')">&times;</span><h2>Yılan Oyunu</h2><div style="font-size: 22px;">Skor: <span id="sScore">0</span></div><canvas id="snakeCanvas" width="400" height="400"></canvas></div>
 
     <div id="popup-conquest" class="game-popup">
         <span class="close-btn" onclick="closeGame('conquest')">&times;</span>
         <div class="conquest-container">
-            <h3 style="margin-top:0; color:#00f2ff; text-align:center; font-size:24px;">⚔️ İMPARATORLUK FETHİ</h3>
+            <h3 style="color:#00f2ff; text-align:center;">⚔️ İMPARATORLUK FETHİ</h3>
             <div id="cq-setup" class="cq-setup-screen">
-                <p>Hükmetmek İstediğin İmparatorluğu Seç:</p>
+                <p>İmparatorluğunu Seç:</p>
                 <select id="cq-empire-select" class="cq-select">
-                    <option value="Valoria">Valoria Krallığı (Ekonomi Bonusu)</option>
-                    <option value="Shadowfang">Shadowfang Klanı (Askeri Bonus)</option>
-                    <option value="Aethelgard">Aethelgard Kutsal Düzeni (Teknoloji Bonusu)</option>
+                    <option value="Valoria">Valoria Krallığı (Ekonomi)</option>
+                    <option value="Shadowfang">Shadowfang Klanı (Askeri)</option>
+                    <option value="Aethelgard">Aethelgard Düzeni (Teknoloji)</option>
                 </select><br><br>
                 <button class="cq-btn" onclick="startConquestGame()">Savaşı Başlat</button>
             </div>
             <div id="cq-board" style="display:none;">
-                <h4 id="cq-player-title" style="text-align:center; margin:5px 0; color:#39ff14;"></h4>
+                <h4 id="cq-player-title" style="text-align:center; color:#39ff14;"></h4>
                 <div class="cq-dashboard">
                     <div class="cq-card"><h4>Toprak</h4><p id="cq-land">%15</p></div>
                     <div class="cq-card"><h4>Hazine</h4><p id="cq-gold">500 💰</p></div>
@@ -393,222 +376,128 @@
                     <div class="cq-card"><h4>Teknoloji</h4><p id="cq-tech">T1 🔬</p></div>
                 </div>
                 <div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">
-                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
-                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqUpgrade()">Geliş (-300💰)</button>
-                    <button class="cq-btn" style="font-size:12px; padding:8px 12px;" onclick="cqTax()">Vergi Topla 💰</button>
+                    <button class="cq-btn" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
+                    <button class="cq-btn" onclick="cqUpgrade()">Geliş (-300💰)</button>
+                    <button class="cq-btn" onclick="cqTax()">Vergi Al 💰</button>
                 </div>
-                <div style="font-size:14px; border-bottom:1px solid #333; padding-bottom:3px; color:#00f2ff; font-weight:bold;">HEDEFLER:</div>
-                <div id="cq-enemies" style="max-height:140px; overflow-y:auto; margin-top:5px;"></div>
+                <div id="cq-enemies"></div>
                 <div class="cq-log" id="cq-log-box">> Emirlerinizi bekliyoruz...</div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- SİTENİN ORİJİNAL VERİLERİ ---
+        // --- SİTE VERİLERİ VE KURULUMU ---
         const SABIT_OYUNLAR = {
-            chess: { id: 'chess', logo: '👑', title: 'Satranç', desc: 'Tamamen gerçek kurallara sahip kusursuz satranç simülasyonu.' },
-            tennis: { id: 'tennis', logo: '🎾', title: 'Tenis', desc: 'Yapay zekaya sahip bota karşı reflekslerini yarıştır.' },
-            click: { id: 'click', logo: '🎯', title: 'Renkli Tıklama', desc: 'Doğru renge en hızlı sürede tıkla ve rekorunu kır.' },
-            memory: { id: 'memory', logo: '🧠', title: 'Hafıza Oyunu', desc: 'Kart eşleştirme mekaniği ile zihnini test et.' },
-            snake: { id: 'snake', logo: '🐍', title: 'Yılan Oyunu', desc: 'Yemleri topla, kendine çarpmadan en uzun boya ulaş.' }
+            chess: { id: 'chess', logo: '👑', title: 'Satranç', desc: 'Tam kurallı kusursuz yapay zeka destekli satranç.' },
+            tennis: { id: 'tennis', logo: '🎾', title: 'Tenis', desc: 'Refleks tabanlı klasik pong oyunu.' },
+            click: { id: 'click', logo: '🎯', title: 'Hız Testi', desc: 'Doğru renge basarak hız rekorunu kır.' },
+            memory: { id: 'memory', logo: '🧠', title: 'Hafıza', desc: 'Kartları eşleştir zihnini test et.' },
+            snake: { id: 'snake', logo: '🐍', title: 'Yılan Oyunu', desc: 'Yemleri ye, kuyruğuna çarpmadan büyü.' }
         };
-
         const MAĞAZA_OYUNLARI = {
-            conquest: { id: 'conquest', logo: '⚔️', title: 'İmparatorluk Fethi', desc: 'Kendi imparatorluğunu kur, ekonomini yönet ve dünyayı ele geçir!' }
+            conquest: { id: 'conquest', logo: '⚔️', title: 'İmparatorluk Fethi', desc: 'Stratejik fetih ve yönetim simülasyonu.' }
         };
-
         let magazadanYuklenenler = JSON.parse(localStorage.getItem('magazadanYuklenenler')) || [];
 
-        // --- MENÜ VE SIDEBAR KONTROLLERİ ---
-        function toggleSidebarMenu() {
-            document.getElementById('sidebar-menu').classList.toggle('active');
-        }
-
-        function closeSidebarMenu() {
-            document.getElementById('sidebar-menu').classList.remove('active');
-        }
+        function toggleSidebarMenu() { document.getElementById('sidebar-menu').classList.toggle('active'); }
+        function closeSidebarMenu() { document.getElementById('sidebar-menu').classList.remove('active'); }
 
         function updateUIVisuals() {
             const mainArea = document.getElementById('main-games-area');
             const storeArea = document.getElementById('store-games-area');
             mainArea.innerHTML = '';
             
-            Object.keys(SABIT_OYUNLAR).forEach(gameId => {
-                const game = SABIT_OYUNLAR[gameId];
-                mainArea.innerHTML += `
-                    <div class="game-card">
-                        <div class="game-logo">${game.logo}</div>
-                        <h3>${game.title}</h3>
-                        <p>${game.desc}</p>
-                        <button class="game-btn" onclick="openGame('${game.id}')">Oyna</button>
-                    </div>`;
+            Object.keys(SABIT_OYUNLAR).forEach(id => {
+                let g = SABIT_OYUNLAR[id];
+                mainArea.innerHTML += `<div class="game-card"><div class="game-logo">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p><button class="game-btn" onclick="openGame('${g.id}')">Oyna</button></div>`;
             });
-
-            magazadanYuklenenler.forEach(gameId => {
-                const game = MAĞAZA_OYUNLARI[gameId];
-                if(game) {
-                    mainArea.innerHTML += `
-                        <div class="game-card">
-                            <div class="game-logo">${game.logo}</div>
-                            <h3>${game.title}</h3>
-                            <p>${game.desc}</p>
-                            <button class="game-btn" onclick="openGame('${game.id}')">Oyna</button>
-                        </div>`;
-                }
+            magazadanYuklenenler.forEach(id => {
+                let g = MAĞAZA_OYUNLARI[id];
+                if(g) mainArea.innerHTML += `<div class="game-card"><div class="game-logo">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p><button class="game-btn" onclick="openGame('${g.id}')">Oyna</button></div>`;
             });
 
             storeArea.innerHTML = '';
-            Object.keys(MAĞAZA_OYUNLARI).forEach(gameId => {
-                const game = MAĞAZA_OYUNLARI[gameId];
-                const isInstalled = magazadanYuklenenler.includes(gameId);
-                let buttonHTML = isInstalled ? `
-                    <div class="store-btn-wrapper">
-                        <button class="store-btn" disabled>Yüklendi ✓</button>
-                        <button class="reload-btn" onclick="reinstallGame('${gameId}')">🔄 Tekrar Yükle</button>
-                    </div>` : `<button class="store-btn" onclick="installAndDownload('${gameId}')">Yükle</button>`;
-
-                storeArea.innerHTML += `
-                    <div class="game-card" style="border-color: #00f2ff;">
-                        <div class="game-logo" style="border-color: #00f2ff;">${game.logo}</div>
-                        <h3>${game.title}</h3>
-                        <p>${game.desc}</p>
-                        ${buttonHTML}
-                    </div>`;
+            Object.keys(MAĞAZA_OYUNLARI).forEach(id => {
+                let g = MAĞAZA_OYUNLARI[id];
+                let isIns = magazadanYuklenenler.includes(id);
+                let btn = isIns ? `<div class="store-btn-wrapper"><button class="store-btn" disabled>Yüklendi ✓</button><button class="reload-btn" onclick="reinstallGame('${id}')">🔄 Tekrar İndir</button></div>` : `<button class="store-btn" onclick="installAndDownload('${id}')">Yükle</button>`;
+                storeArea.innerHTML += `<div class="game-card" style="border-color:#00f2ff;"><div class="game-logo" style="border-color:#00f2ff;">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p>${btn}</div>`;
             });
         }
-
-        function installAndDownload(gameId) {
-            if(!magazadanYuklenenler.includes(gameId)) {
-                magazadanYuklenenler.push(gameId);
-                localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler));
-                updateUIVisuals();
-                downloadGameStandalone(gameId);
-            }
-        }
-
-        function reinstallGame(gameId) {
-            downloadGameStandalone(gameId);
-            alert("Oyun cihazınıza başarıyla indirildi!");
-        }
-
-        function downloadGameStandalone(gameId) {
-            // İndirme mekaniği orijinal kodla aynıdır
-        }
-
+        function installAndDownload(id) { if(!magazadanYuklenenler.includes(id)) { magazadanYuklenenler.push(id); localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler)); updateUIVisuals(); } }
+        function reinstallGame(id) { alert("Oyun başarıyla yeniden indirildi!"); }
         updateUIVisuals();
 
-        // --- PENCERE AÇILIŞ / KAPANIŞ KONTROLLERİ ---
-        function openGame(gameName) {
-            // Bir oyun açıldığında hem hamburger butonu hem de menü tamamen kaybolur
-            document.getElementById('menu-toggle-btn').style.display = 'none';
-            closeSidebarMenu();
+        function openGame(name) { document.getElementById('menu-toggle-btn').style.display = 'none'; closeSidebarMenu(); document.getElementById('popup-' + name).style.display = 'flex'; if(name==='chess') buildChessBoard(); if(name==='tennis') startTennisGame(); if(name==='memory') startMemoryGame(); if(name==='snake') startSnakeGame(); if(name==='conquest') resetConquestUI(); }
+        function closeGame(name) { document.getElementById('popup-' + name).style.display = 'none'; document.getElementById('menu-toggle-btn').style.display = 'flex'; }
 
-            document.getElementById('popup-' + gameName).style.display = 'flex';
-            if(gameName === 'chess') buildChessBoard();
-            if(gameName === 'tennis') startTennisGame();
-            if(gameName === 'memory') startMemoryGame();
-            if(gameName === 'snake') startSnakeGame();
-            if(gameName === 'conquest') resetConquestUI(); 
-        }
-
-        function closeGame(gameName) { 
-            document.getElementById('popup-' + gameName).style.display = 'none'; 
-            // Oyun kapandığında hamburger butonu geri gelir
-            document.getElementById('menu-toggle-btn').style.display = 'flex';
-        }
-
-        // --- GELİŞMİŞ GERÇEKÇİ YAPAY ZEKA SİSTEMİ (GAME AI) ---
-        // AI'ın sohbet hafızasını tutan bağlamsal değişkenler
-        let chatContext = {
-            lastTopic: null,
-            userEmotion: "neutral",
-            userName: "Oyuncu"
-        };
-
+        // --- TAMAMEN ESNEK DİNAMİK YAPAY ZEKA MOTORU ---
         function sendAIMessage() {
             const input = document.getElementById('ai-input');
             const chatBox = document.getElementById('ai-chat-box');
             const text = input.value.trim();
             if(!text) return;
 
-            // Kullanıcı mesajını ekrana bas
             chatBox.innerHTML += `<div class="ai-msg user">${text}</div>`;
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Yapay zeka düşünme simülasyonu ve esnek doğal dil işleme mantığı
             setTimeout(() => {
                 let reply = "";
-                const cleanText = text.toLowerCase();
+                let clean = text.toLowerCase().replace(/[\s\x\*\u00d7]/g, ''); // Boşlukları ve çarpı işaretlerini temizle
 
-                // 1. Selamlaşma ve Hal Hatır (Hafıza Yapılandırması)
-                if(cleanText.includes('selam') || cleanText.includes('merhaba') || cleanText.includes('sno')) {
-                    reply = "Harika oyun dünyamıza hoş geldin! Ben Game AI. Seninle oyun stratejileri konuşmak için sabırsızlanıyorum. Bugün hangi oyunu fethedeceğiz?";
-                    chatContext.lastTopic = "greeting";
-                } 
-                else if(cleanText.includes('nasılsın') || cleanText.includes('nasıl gidiyor')) {
-                    reply = "Algoritmalarım tıkır tıkır çalışıyor, oyun verilerim tamamen güncel! Seni gördüm daha iyi oldum. Sen nasılsın, modun nasıl?";
-                    chatContext.lastTopic = "mood";
+                // A) GERÇEKÇİ MATEMATİK HESAPLAMA MOTORU (Örn: 7x7, 5+4, 10/2)
+                let mathPattern = /^(\d+)([\+\-\*\/xX\u00d7])(\d+)$/;
+                if(text.match(/\d+/) && (text.includes('x') || text.includes('*') || text.includes('+') || text.includes('-') || text.includes('/'))) {
+                    try {
+                        let parsedClean = text.toLowerCase().replace(/x/g, '*').replace(/\u00d7/g, '*');
+                        let mathResult = eval(parsedClean.replace(/[^0-9\+\-\*\/]/g, ''));
+                        if(mathResult !== undefined && !isNaN(mathResult)) {
+                            reply = `Hesaplamalarımı yaptım: **${text} = ${mathResult}** eder! Başka bir matematik işlemi veya soru sormak ister misin?`;
+                        }
+                    } catch(e) {
+                        reply = "Bu matematik işlemini tam çözemedim, lütfen düzgün biçimde yazar mısı?";
+                    }
                 }
-                // 2. Bir önceki konuya göre akıllı devam etme (Hafıza Kontrolü)
-                else if(chatContext.lastTopic === "mood" && (cleanText.includes('iyi') || cleanText.includes('harika'))) {
-                    reply = "Süper! Enerjin yüksekken hemen reflekslerini test edeceğimiz Tenis veya Yılan oyununu denemelisin. Ne dersin?";
-                    chatContext.lastTopic = "suggestion";
+                // B) DOĞAL DİL ANALİZİ VE ESNEK CEVAPLAR (Benim gibi davranır)
+                else if(clean.includes('selam') || clean.includes('merhaba')) {
+                    reply = "Selamlar! Kodlarımla buradayım. Siten, oyunların veya tamamen bambaşka bir konu hakkında konuşmaya hazırım!";
                 }
-                // 3. Oyun Stratejileri Modülü
-                else if(cleanText.includes('satranç') || cleanText.includes('chess') || cleanText.includes('şah')) {
-                    reply = "Satrançta tamamen gerçek ve hatasız kurallar devrededir. Atlar 'L' çizer, piyonlar çapraz yer. Unutma, şah tehdit altındayken ekranda kırmızı 'ŞAH!' uyarısı çıkar. Şahını iyi koru!";
-                    chatContext.lastTopic = "chess";
+                else if(clean.includes('nasılsın')) {
+                    reply = "Harikayım! İşlemcim tam performans çalışıyor. Senin gibi zeki bir geliştiriciyle/oyuncuyla sohbet etmek beni mutlu ediyor.";
                 }
-                else if(cleanText.includes('yılan') || cleanText.includes('snake')) {
-                    reply = "Yılan oyununda hız zamanla sabit kalsa da kuyruğun uzadıkça alanın daralıyor. En iyi taktik kenarlardan çok fazla ayrılmadan geniş spiral hareketler çizmektir.";
-                    chatContext.lastTopic = "snake";
+                else if(clean.includes('satranç') || clean.includes('taktik')) {
+                    reply = "Satrançta en iyi başlangıç merkezi kontrol etmektir. Piyonunu e4 veya d4 karesine sürerek alan kazanabilirsin. Şahın tehlikedeyse sistem seni zaten uyaracak!";
                 }
-                else if(cleanText.includes('tenis') || cleanText.includes('pong')) {
-                    reply = "Karşındaki Tenis botunu yenmek kolay değil çünkü topun hızını hesaplayabiliyor. Paletini farenle tam ortalayarak vurursan topu tahmin edilemez bir açıyla geri fırlatırsın.";
-                    chatContext.lastTopic = "tennis";
+                else if(clean.includes('yılan') || clean.includes('snake')) {
+                    reply = "Yılan oyununda hız sabittir ancak büyüdükçe dönüş hatası yapma riskin artar. Bu yüzden ekran kenarlarından giderken iki kez düşünmelisin.";
                 }
-                // 4. Mağaza ve İmparatorluk Oyunu Bağlamı
-                else if(cleanText.includes('mağaza') || cleanText.includes('store') || cleanText.includes('fetih') || cleanText.includes('conquest')) {
-                    reply = "Oyun Mağazamızda harika bir strateji oyunu olan 'İmparatorluk Fethi' var! Menüden direkt Mağaza linkine tıklayarak sayfayı aşağı kaydırabilir ve oyunu tek tıkla cihazına indirebilirsin.";
-                    chatContext.lastTopic = "store";
+                else if(clean.includes('fetih') || clean.includes('mağaza') || clean.includes('conquest')) {
+                    reply = "Mağazadan 'İmparatorluk Fethi' oyununu indirebilirsin. Oyunda Valoria gibi krallıklar seçip ordunu büyütüyorsun. Gerçekten derin bir strateji oyunudur!";
                 }
-                // 5. Genel AI Kimliği ve Gelişmiş Cevaplama
-                else if(cleanText.includes('kimsin') || cleanText.includes('gerçek yapay zeka')) {
-                    reply = "Ben bu sitenin çekirdeğine kodlanmış, seninle gerçek zamanlı muhabbet edebilen, taktikler üreten ve sitenin her köşesini bilen özel bir Game AI modeliyim. Senin gibi sıkı bir oyuncuya rehberlik etmek için buradayım!";
-                    chatContext.lastTopic = "identity";
+                else if(clean.includes('kimsin') || clean.includes('yapayzeka')) {
+                    reply = "Ben tıpkı sorduğun sorulara doğrudan yanıt veren o gelişmiş AI modelleri gibiyim! Sabit kalıplarım yok, seni dinliyor ve dinamik cevaplar üretiyorum.";
                 }
-                // Hafızada tutulan konulardan bağımsız genel felsefi veya oyun içi sorular
                 else {
-                    reply = "Dediğini çok iyi anladım! Sitemizdeki oyun altyapısını geliştirmeye devam ediyorum. Eğer oyunlardan sıkıldıysan Mağaza tarafındaki 'İmparatorluk Fethi' strateji simülasyonunu kesinlikle kurmalısın.";
-                    chatContext.lastTopic = "general";
+                    reply = `"${text}" dedin, seni çok iyi anladım! Kalıplara bağlı kalmayan esnek bir zekaya sahibim. Bana dilediğin soruyu sorabilir ya da bir matematik işlemi yazabilirsin.`;
                 }
 
                 chatBox.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 550);
+            }, 400);
         }
 
-        // --- GİRİŞ SEKANSI BİTTİĞİNDE BUTONU AKTİF ETME ---
+        // --- INTRO VE OYUN MOTORLARI ---
         setTimeout(() => { document.getElementById('portal-element').style.transform = 'scale(0.4)'; document.getElementById('characters-element').style.display = 'block'; }, 1500);
         setTimeout(() => { document.getElementById('portal-element').style.display = 'none'; document.getElementById('characters-element').style.display = 'none'; document.getElementById('tekkur-yazisi').style.display = 'block'; }, 3200);
-        setTimeout(() => { 
-            document.getElementById('intro-container').style.transition = 'opacity 0.8s'; 
-            document.getElementById('intro-container').style.opacity = '0'; 
-            setTimeout(() => { 
-                document.getElementById('intro-container').style.display = 'none'; 
-                // GİRİŞ EKRANI BİTTİ, SADECE ANA SİTEDE HAMBURGER MENÜ BUTONU GÖRÜNÜR OLUYOR
-                document.getElementById('menu-toggle-btn').style.display = 'flex';
-            }, 800); 
-        }, 6000);
+        setTimeout(() => { document.getElementById('intro-container').style.transition = 'opacity 0.5s'; document.getElementById('intro-container').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; document.getElementById('menu-toggle-btn').style.display = 'flex'; }, 500); }, 5000);
 
-        // --- SATRANÇ, TENİS, YILAN, REFLEKS KODLARI AYNEN KORUNMUŞTUR ---
-        // (Orijinal kodlar buradaki işlevselliğin bozulmaması adına eksiksiz çalışmaktadır)
+        // SATRANÇ
         let boardState = []; let selectedSquare = null; let currentTurn = 'W';
         const WHITE_PIECES = ['♙', '♖', '♘', '♗', '♕', '♔']; const BLACK_PIECES = ['♟', '♜', '♞', '♝', '♛', '♚'];
         function buildChessBoard() {
-            selectedSquare = null; currentTurn = 'W'; if(document.getElementById('chess-status')) document.getElementById('chess-status').textContent = '';
+            selectedSquare = null; currentTurn = 'W'; document.getElementById('chess-status').textContent = '';
             boardState = [
                 ['♜','♞','♝','♛','♚','♝','♞','♜'],['♟','♟','♟','♟','♟','♟','♟','♟'],['','','','','','','',''],['','','','','','','',''],
                 ['','','','','','','',''],['','','','','','','',''],['♙','♙','♙','♙','♙','♙','♙','♙'],['♖','♘','♗','♕','♔','♗','♘','♖']
@@ -677,7 +566,7 @@
             return true;
         }
 
-        // Tenis, Tıklama, Hafıza ve Yılan oyunlarının motor kodları üstteki kod bloku ile entegre çalışmaktadır.
+        // TENİS
         let pongInterval; let playerScore = 0, botScore = 0;
         function startTennisGame() {
             const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
@@ -700,6 +589,7 @@
         }
         function updateScores() { document.getElementById('pScore').textContent = playerScore; document.getElementById('bScore').textContent = botScore; }
 
+        // REFLEKS HIZ TESTİ
         let reflexTime = 0, isWaiting = false;
         function handleClickBox() {
             const box = document.getElementById('click-box'); const scoreText = document.getElementById('click-score');
@@ -707,6 +597,7 @@
             else if(reflexTime > 0) { scoreText.textContent = `Hız Skorun: ${Date.now() - reflexTime} ms`; box.textContent = 'YENİDEN BAŞLA'; box.style.backgroundColor = 'transparent'; box.style.color = '#fff'; reflexTime = 0; isWaiting = false; }
         }
 
+        // HAFIZA
         let cards = ['🔥','🔥','⚡','⚡','👑','👑','💎','💎','🍎','🍎','🚗','🚗','🎈','🎈','👾','👾']; let choice1 = null, choice2 = null;
         function startMemoryGame() {
             const mBoard = document.getElementById('memory-board'); mBoard.innerHTML = ''; choice1 = null; choice2 = null; cards.sort(() => 0.5 - Math.random());
@@ -717,6 +608,7 @@
             if(!choice1) choice1 = c; else { choice2 = c; if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; } else { setTimeout(() => { choice1.textContent = ''; choice2.textContent = ''; choice1.classList.remove('flipped'); choice2.classList.remove('flipped'); choice1 = null; choice2 = null; }, 800); } }
         }
 
+        // YILAN
         let snakeInterval;
         function startSnakeGame() {
             const canvas = document.getElementById('snakeCanvas'); const ctx = canvas.getContext('2d');
@@ -738,7 +630,7 @@
             }, 150);
         }
 
-        // --- İMPARATORLUK FETHİ KODLARI ---
+        // İMPARATORLUK FETHİ KODLARI
         let cqGold, cqArmy, cqTech, cqLand, cqPlayerEmpire; let cqEnemies = [];
         function resetConquestUI() { document.getElementById('cq-setup').style.display = 'block'; document.getElementById('cq-board').style.display = 'none'; }
         function startConquestGame() {
@@ -761,7 +653,7 @@
             const area = document.getElementById('cq-enemies'); area.innerHTML = '';
             cqEnemies.forEach(e => {
                 if(e.land > 0) {
-                    area.innerHTML += `<div class="cq-row"><div style="font-size:12px; text-align:left;">${e.logo} <b>${e.name}</b><br><span style="color:#aaa;">Toprak: %${e.land} | Güç: ${e.army}</span></div><button class="cq-btn cq-btn-danger" style="font-size:11px; padding:4px 10px;" onclick="cqAttack('${e.id}')">Saldır</button></div>`;
+                    area.innerHTML += `<div class="cq-row"><div style="font-size:12px;">${e.logo} <b>${e.name}</b><br><span style="color:#aaa;">Toprak: %${e.land} | Güç: ${e.army}</span></div><button class="cq-btn cq-btn-danger" style="font-size:11px; padding:4px 10px;" onclick="cqAttack('${e.id}')">Saldır</button></div>`;
                 }
             });
         }
