@@ -116,7 +116,7 @@
         }
         .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); transform: translateY(-2px); }
 
-        /* MAĞAZA BUTONLARI VE RE-LOAD YÜKLEME SİSTEMİ */
+        /* MAĞAZA BUTONLARI VE YENİDEN YÜKLEME SİSTEMİ */
         .store-btn-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; }
         .store-btn {
             background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 14px 30px; border-radius: 12px;
@@ -357,11 +357,10 @@
             alert("Oyun başarıyla yeniden yüklendi ve cihazınıza indirildi!");
         }
 
-        // TAMAMEN ÇALIŞAN STANDALONE (BAĞIMSIZ) OYUN PAKETLEYİCİSİ
+        // TAMAMEN ÇALIŞAN STANDALONE (BAĞIMSIZ) OYUN PAKETLEYİCİSİ (Hatalar Temizlendi)
         function downloadGameStandalone(gameId) {
             if(gameId !== 'conquest') return;
 
-            // İndirilen dosyanın kendi içinde eksiksiz çalışması için gerekli tüm kodlar:
             const standaloneContent = `<!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -443,10 +442,10 @@
             const area = document.getElementById('cq-enemies'); area.innerHTML = '';
             cqEnemies.forEach(e => {
                 if(e.land > 0) {
-                    area.innerHTML += \`<div class="cq-row">
-                        <div style="font-size:13px; text-align:left;">\${e.logo} <b>\${e.name}</b><br><span style="color:#aaa;">Toprak: %\${e.land} | Güç: \${e.army}</span></div>
-                        <button class="cq-btn cq-btn-danger" style="font-size:12px; padding:6px 12px;" onclick="cqAttack('\${e.id}')">Saldır</button>
-                    </div>\`;
+                    area.innerHTML += '<div class="cq-row">' +
+                        '<div style="font-size:13px; text-align:left;">' + e.logo + ' <b>' + e.name + '</b><br><span style="color:#aaa;">Toprak: %' + e.land + ' | Güç: ' + e.army + '</span></div>' +
+                        '<button class="cq-btn cq-btn-danger" style="font-size:12px; padding:6px 12px;" onclick="cqAttack(\\'' + e.id + '\\')">Saldır</button>' +
+                    '</div>';
                 }
             });
         }
@@ -460,11 +459,11 @@
             if(pPower > ePower) {
                 let cap = Math.min(e.land, Math.floor(Math.random()*6)+5); e.land -= cap; cqLand += cap;
                 let loss = Math.floor(cqArmy * 0.25); cqArmy -= loss; e.army = Math.floor(e.army * 0.3); cqGold += (cap * 30);
-                cqLog(\`ZAFER! Düşmandan %\${cap} toprak alındı. \${loss} kayıp verdik.\`);
-            } else { let loss = Math.floor(cqArmy * 0.5); cqArmy -= loss; cqLog(\`YENİLGİ! Sefer başarısız, ordu hasar aldı.\`); }
+                cqLog("ZAFER! Düşmandan %" + cap + " toprak alındı. " + loss + " kayıp verdik.");
+            } else { let loss = Math.floor(cqArmy * 0.5); cqArmy -= loss; cqLog("YENİLGİ! Sefer başarısız, ordu hasar aldı."); }
             cqUpdateUI();
         }
-    </script>
+    <\/script>
 </body>
 </html>`;
 
