@@ -341,10 +341,9 @@
         }
 
         /* ==========================================================================
-           EKSTRA RESPONSIVE KATMANI (MACBOOK, IPHONE, ANDROID, TABLET UYUMLULUĞU)
+           YENİLENMİŞ MOBİL VE TABLET TAM EKRAN (FULL-MAXİMUM SPREAD) KATMANI
            ========================================================================== */
 
-        /* 1. TABLETLER VE KÜÇÜK EKRANLI LAPTOPLAR (Max 1024px - iPad, Küçük Ekranlar) */
         @media (max-width: 1024px) {
             .hero h1 { font-size: 65px; letter-spacing: 5px; }
             .hero p { font-size: 20px; }
@@ -352,48 +351,84 @@
             nav { padding: 20px 30px; gap: 20px; }
         }
 
-        /* 2. TELEFONLAR (Max 768px - iPhone, Android Telefonlar Portre Modu) */
+        /* AKILLI TELEFONLAR İÇİN MAKSİMUM BÜYÜKLÜK VE TAM EKRAN YAYILIMI */
         @media (max-width: 768px) {
-            nav { display: none; } /* Mobilde üst bar yerine tamamen sol menü (☰) kullanılacak */
+            nav { display: none; } 
             
-            .hero h1 { font-size: 42px; letter-spacing: 3px; }
-            .hero p { font-size: 16px; margin-top: 10px; }
-            .explore-btn { margin-top: 30px; padding: 12px 30px; font-size: 16px; }
+            .hero h1 { font-size: 45px; letter-spacing: 2px; line-height: 1.2; }
+            .hero p { font-size: 18px; margin-top: 12px; }
+            .explore-btn { margin-top: 35px; padding: 15px 35px; font-size: 18px; width: 80%; box-sizing: border-box; }
 
-            .container { padding: 50px 15px; }
-            .container h2 { font-size: 30px; margin-bottom: 30px; }
-            .games-grid { gap: 20px; }
-            .game-card { width: 100%; max-width: 290px; padding: 25px 20px; }
+            .container { padding: 40px 10px; }
+            .container h2 { font-size: 32px; margin-bottom: 25px; }
+            .games-grid { gap: 15px; padding: 0 5px; }
+            .game-card { width: 100%; max-width: 100%; padding: 30px 20px; box-sizing: border-box; }
 
-            /* Telefonlarda oyun popuplarının taşmasını önleme ölçeklendirmeleri */
-            #chess-board { 
-                grid-template-columns: repeat(8, 38px); 
-                grid-template-rows: repeat(8, 38px); 
+            /* MOBİLDE POPUP EKRANLARINI SIFIR BOŞLUK TAM PANEL YAPMA */
+            .game-popup {
+                padding: 10px;
+                justify-content: flex-start;
+                padding-top: 70px; /* Üst kapatma butonunun altına gelsin */
             }
-            .square { width: 38px; height: 38px; font-size: 24px; }
+            .game-popup h2 { font-size: 28px; margin-top: 10px; margin-bottom: 15px; }
+            .close-btn { top: 15px; right: 20px; font-size: 45px; background: rgba(0,0,0,0.5); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 
-            #memory-board { grid-template-columns: repeat(4, 60px); gap: 8px; }
-            .card { width: 60px; height: 60px; font-size: 24px; }
+            /* 1. MOBİL SATRANÇ: SIFIRA SIFIR TAM EKRAN KAPLAMA */
+            #chess-board { 
+                grid-template-columns: repeat(8, calc(100vw / 8 - 3px)); 
+                grid-template-rows: repeat(8, calc(100vw / 8 - 3px));
+                border-width: 3px;
+                width: calc(100vw - 20px);
+                height: calc(100vw - 20px);
+                margin: auto;
+            }
+            .square { 
+                width: 100%; 
+                height: 100%; 
+                font-size: calc(100vw / 12); /* Taş boyutunu ekrana göre dinamik büyütür */
+            }
 
-            #click-box { width: 240px; height: 240px; font-size: 24px; }
+            /* 2. MOBİL HAFIZA KARTLARI: BÜYÜTÜLMÜŞ KART YAPISI */
+            #memory-board { 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 10px; 
+                width: 100%;
+                max-width: 360px;
+                margin: auto;
+            }
+            .card { 
+                width: 100%; 
+                height: calc((100vw - 60px) / 4); 
+                max-height: 85px;
+                font-size: 32px; 
+            }
 
-            .close-btn { top: 15px; right: 20px; font-size: 35px; }
+            /* 3. MOBİL REFLEKS KUTUSU: BÜTÜN PANELİ KAPLAYACAK KADAR BÜYÜK */
+            #click-box { 
+                width: 95%; 
+                height: 45vh; 
+                font-size: 36px; 
+                margin: auto;
+            }
 
+            /* 4. MOBİL KANVASLAR (YILAN VE TENİS): GENİŞLİK %100 OLSUN */
+            canvas#pongCanvas, canvas#snakeCanvas {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* 5. STRATEJİ OYUNU EKSTRE MOBİL ENTEGRASYONU */
+            .conquest-container { width: 100%; padding: 12px; border-radius: 10px; }
             .cq-dashboard { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            .cq-row { flex-direction: column; gap: 8px; text-align: center; padding: 10px; }
+            .cq-row { flex-direction: column; gap: 8px; text-align: center; padding: 12px; }
+            .cq-btn { width: 100%; margin: 4px 0; padding: 12px; font-size: 15px; }
         }
 
-        /* 3. ÇOK KÜÇÜK TELEFONLAR (Max 380px - Küçük Ekranlı Eski Cihazlar) */
         @media (max-width: 380px) {
-            .hero h1 { font-size: 34px; }
-            #chess-board { 
-                grid-template-columns: repeat(8, 32px); 
-                grid-template-rows: repeat(8, 32px); 
-            }
-            .square { width: 32px; height: 32px; font-size: 20px; }
-            #memory-board { grid-template-columns: repeat(4, 52px); gap: 6px; }
-            .card { width: 52px; height: 52px; font-size: 20px; }
-            #sidebar-menu { width: 280px; left: -310px; }
+            .hero h1 { font-size: 36px; }
+            #sidebar-menu { width: 290px; left: -320px; }
             #sidebar-menu.active { left: 10px; }
         }
     </style>
@@ -538,7 +573,7 @@
             localStorage.setItem('highScores', JSON.stringify(highScores));
         }
 
-        // URL KONTROLÜ: Sadece linkin sonunda #admin varsa çalışır
+        // URL KONTROLÜ
         function checkAdminHash() {
             if (window.location.hash === '#admin') {
                 openAdminPanel();
@@ -706,12 +741,10 @@
 
         // --- SAYFA AÇILIŞ/YÜKLENİŞ KONTROLLERİ VE INTRO MOTORU ---
         window.addEventListener('DOMContentLoaded', () => {
-            // Eğer URL sonu admin ise introyu gösterme, direkt paneli aç
             if (window.location.hash === '#admin') {
                 document.getElementById('intro-container').style.display = 'none';
                 openAdminPanel();
             } else {
-                // Admin değilse normal açılış introsunu başlat
                 startIntroAnimations();
             }
         });
@@ -817,10 +850,9 @@
             const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
             let ballX = 350, ballY = 200, speedX = 5, speedY = 5; let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
             
-            // Mobil dokunmatik ve masaüstü mouse desteği eşzamanlı
             const handleMove = (clientY) => {
                 let rect = canvas.getBoundingClientRect();
-                let scaleY = canvas.height / rect.height; // Ekran küçüldüğünde raketin doğru yerde kalması için oranlama
+                let scaleY = canvas.height / rect.height; 
                 pY = (clientY - rect.top) * scaleY - pHeight / 2;
             };
             
@@ -942,7 +974,7 @@
         }
         function cqRecruit() { if(cqGold >= 100) { cqGold -= 100; cqArmy += (40 + cqTech*15); cqLog("Orduya yeni savaşçılar katıldı."); cqUpdateUI(); } else cqLog("Hazine yetersiz!"); }
         function cqUpgrade() { if(cqGold >= 300) { cqGold -= 300; cqTech++; cqLog("Teknoloji seviyesi yükseltildi."); cqUpdateUI(); } else cqLog("Gelişim için yeterli altın yok!"); }
-        function cqTax() { let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain; cqGold += gain; cqLog("Vergiler alındı: +" + gain + " 💰"); cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); }); cqUpdateUI(); }
+        function cqTax() { let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain; cqLog("Vergiler alındı: +" + gain + " 💰"); cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); }); cqUpdateUI(); }
         function cqAttack(id) {
             let e = cqEnemies.find(x => x.id === id); if(!e || cqArmy <= 0) return;
             let pPower = cqArmy * (1 + cqTech*0.2) * (Math.random()*0.4 + 0.8); let ePower = e.army * (Math.random()*0.4 + 0.8);
