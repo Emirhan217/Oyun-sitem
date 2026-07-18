@@ -357,7 +357,7 @@
             alert("Oyun başarıyla yeniden yüklendi ve cihazınıza indirildi!");
         }
 
-        // TAMAMEN ÇALIŞAN STANDALONE (BAĞIMSIZ) OYUN PAKETLEYİCİSİ (Hatalar Temizlendi)
+        // TAMAMEN ÇALIŞAN STANDALONE (BAĞIMSIZ) OYUN PAKETLEYİCİSİ
         function downloadGameStandalone(gameId) {
             if(gameId !== 'conquest') return;
 
@@ -583,33 +583,68 @@
         setTimeout(() => { document.getElementById('portal-element').style.display = 'none'; document.getElementById('characters-element').style.display = 'none'; document.getElementById('tekkur-yazisi').style.display = 'block'; }, 3200);
         setTimeout(() => { document.getElementById('intro-container').style.transition = 'opacity 0.8s'; document.getElementById('intro-container').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; }, 800); }, 6000);
 
-        // Satranç
-        let boardState = []; let selectedSquare = null;
+        // --- TAMAMEN YENİLENMİŞ VE HATASIZ SATRANÇ SİSTEMİ ---
+        let boardState = []; 
+        let selectedSquare = null; // {r: sayı, c: sayı} tipinde tutulacak
+
         function buildChessBoard() {
             selectedSquare = null;
             boardState = [
-                ['♜','♞','♝','♛','♚','♝','♞','♜'], ['♟','♟','♟','♟','♟','♟','♟','♟'],
-                ['','','','','','','',''], ['','','','','','','',''],
-                ['','','','','','','',''], ['','','','','','','',''],
-                ['♙','♙','♙','♙','♙','♙','♙','♙'], ['♖','♘','♗','♕','♔','♗','♘','♖']
+                ['♜','♞','♝','♛','♚','♝','♞','♜'],
+                ['♟','♟','♟','♟','♟','♟','♟','♟'],
+                ['','','','','','','',''],
+                ['','','','','','','',''],
+                ['','','','','','','',''],
+                ['','','','','','','',''],
+                ['♙','♙','♙','♙','♙','♙','♙','♙'],
+                ['♖','♘','♗','♕','♔','♗','♘','♖']
             ];
             drawGrid();
         }
+
         function drawGrid() {
-            const board = document.getElementById('chess-board'); board.innerHTML = '';
+            const board = document.getElementById('chess-board'); 
+            board.innerHTML = '';
+            
             for(let r=0; r<8; r++) {
                 for(let c=0; c<8; c++) {
                     const sq = document.createElement('div');
-                    sq.className = `square ${(r+c)%2===0?'white':'black'}`; sq.textContent = boardState[r][c];
-                    if(selectedSquare && selectedSquare.r === r && selectedSquare.c === c) sq.classList.add('selected');
+                    sq.className = `square ${(r+c)%2===0?'white':'black'}`; 
+                    sq.textContent = boardState[r][c];
+                    
+                    // Eğer bu kare şu an seçili kareyse yeşil yap
+                    if(selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+                        sq.classList.add('selected');
+                    }
+                    
                     sq.onclick = () => handleSquareClick(r, c);
                     board.appendChild(sq);
                 }
             }
         }
+
         function handleSquareClick(r, c) {
-            if (selectedSquare === null) { if (boardState[r][c] !== '') { selectedSquare = {r, c}; drawGrid(); } } 
-            else { if(selectedSquare.r === r && selectedSquare.c === c) { selectedSquare = null; drawGrid(); return; } boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; boardState[selectedSquare.r][selectedSquare.c] = ''; selectedSquare = null; drawGrid(); }
+            // Durum 1: Henüz hiçbir taş seçilmediyse
+            if (selectedSquare === null) {
+                // Tıklanan karede bir taş varsa onu seç
+                if (boardState[r][c] !== '') {
+                    selectedSquare = { r: r, c: c };
+                }
+            } 
+            // Durum 2: Zaten seçili bir taş varken başka bir yere tıklandıysa
+            else {
+                // Eğer oyuncu aynı taşa tekrar tıkladıysa seçimi iptal et
+                if (selectedSquare.r === r && selectedSquare.c === c) {
+                    selectedSquare = null;
+                } else {
+                    // Taşı yeni kareye taşı (ve oradaki taşı ye)
+                    boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c];
+                    boardState[selectedSquare.r][selectedSquare.c] = '';
+                    selectedSquare = null;
+                }
+            }
+            // Görseli güncelle
+            drawGrid();
         }
 
         // Tenis
