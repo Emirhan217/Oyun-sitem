@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oyun Sitem</title>
     <style>
         /* SİTE GENEL AYARLARI */
@@ -14,6 +14,7 @@
             color: #fff;
             scroll-behavior: smooth;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* SOL ÜST KÖŞE HAMBURGER BUTONU */
@@ -29,7 +30,7 @@
             color: #fff;
             font-size: 24px;
             cursor: pointer;
-            display: flex;
+            display: none; /* İlk başta gizli, intro bitince açılacak */
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -183,7 +184,7 @@
         .hero {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             position: relative; background: radial-gradient(circle at center, #1a0033 0%, #030305 70%);
-            overflow: hidden; text-align: center;
+            overflow: hidden; text-align: center; padding: 0 20px;
         }
         .hero::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -193,7 +194,7 @@
             z-index: 1; opacity: 0.6;
         }
         @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 400px; } }
-        .hero-content { position: relative; z-index: 2; }
+        .hero-content { position: relative; z-index: 2; width: 100%; }
         .hero h1 { 
             font-size: 90px; font-weight: 900; margin: 0; color: #fff; text-transform: uppercase; letter-spacing: 8px;
             background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -255,29 +256,30 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
             align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px);
+            padding: 20px; box-sizing: border-box;
         }
-        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; z-index: 10001; }
 
         /* Satranç */
-        #chess-board { display: grid; grid-template-columns: repeat(8, 48px); grid-template-rows: repeat(8, 48px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
+        #chess-board { display: grid; grid-template-columns: repeat(8, 48px); grid-template-rows: repeat(8, 48px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); max-width: 100%; }
         .square { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; }
         .white { background-color: #f0d9b5; color: #000; }
         .black { background-color: #b58863; color: #000; }
         .selected { background-color: #39ff14 !important; }
 
         /* Tenis */
-        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; }
+        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; max-width: 100%; height: auto; }
 
         /* Hız Testi */
-        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; }
+        #click-box { width: 300px; height: 300px; max-width: 100%; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; }
 
         /* Hafıza */
-        #memory-board { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; }
+        #memory-board { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; max-width: 100%; }
         .card { width: 75px; height: 75px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px; cursor: pointer; }
         .card.flipped { background: #141420; border: 2px solid #39ff14; }
 
         /* Yılan */
-        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; }
+        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; max-width: 100%; height: auto; }
 
         /* STRATEJİ OYUNU KAPSAYICI */
         .conquest-container { width: 100%; max-width: 700px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; box-sizing: border-box; }
@@ -336,6 +338,63 @@
         .admin-btn-clear:hover {
             background: #ff2a3a;
             box-shadow: 0 0 15px #ff4757;
+        }
+
+        /* ==========================================================================
+           EKSTRA RESPONSIVE KATMANI (MACBOOK, IPHONE, ANDROID, TABLET UYUMLULUĞU)
+           ========================================================================== */
+
+        /* 1. TABLETLER VE KÜÇÜK EKRANLI LAPTOPLAR (Max 1024px - iPad, Küçük Ekranlar) */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 65px; letter-spacing: 5px; }
+            .hero p { font-size: 20px; }
+            .container h2 { font-size: 38px; margin-bottom: 40px; }
+            nav { padding: 20px 30px; gap: 20px; }
+        }
+
+        /* 2. TELEFONLAR (Max 768px - iPhone, Android Telefonlar Portre Modu) */
+        @media (max-width: 768px) {
+            nav { display: none; } /* Mobilde üst bar yerine tamamen sol menü (☰) kullanılacak */
+            
+            .hero h1 { font-size: 42px; letter-spacing: 3px; }
+            .hero p { font-size: 16px; margin-top: 10px; }
+            .explore-btn { margin-top: 30px; padding: 12px 30px; font-size: 16px; }
+
+            .container { padding: 50px 15px; }
+            .container h2 { font-size: 30px; margin-bottom: 30px; }
+            .games-grid { gap: 20px; }
+            .game-card { width: 100%; max-width: 290px; padding: 25px 20px; }
+
+            /* Telefonlarda oyun popuplarının taşmasını önleme ölçeklendirmeleri */
+            #chess-board { 
+                grid-template-columns: repeat(8, 38px); 
+                grid-template-rows: repeat(8, 38px); 
+            }
+            .square { width: 38px; height: 38px; font-size: 24px; }
+
+            #memory-board { grid-template-columns: repeat(4, 60px); gap: 8px; }
+            .card { width: 60px; height: 60px; font-size: 24px; }
+
+            #click-box { width: 240px; height: 240px; font-size: 24px; }
+
+            .close-btn { top: 15px; right: 20px; font-size: 35px; }
+
+            .cq-dashboard { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .cq-row { flex-direction: column; gap: 8px; text-align: center; padding: 10px; }
+        }
+
+        /* 3. ÇOK KÜÇÜK TELEFONLAR (Max 380px - Küçük Ekranlı Eski Cihazlar) */
+        @media (max-width: 380px) {
+            .hero h1 { font-size: 34px; }
+            #chess-board { 
+                grid-template-columns: repeat(8, 32px); 
+                grid-template-rows: repeat(8, 32px); 
+            }
+            .square { width: 32px; height: 32px; font-size: 20px; }
+            #memory-board { grid-template-columns: repeat(4, 52px); gap: 6px; }
+            .card { width: 52px; height: 52px; font-size: 20px; }
+            #sidebar-menu { width: 280px; left: -310px; }
+            #sidebar-menu.active { left: 10px; }
         }
     </style>
 </head>
@@ -421,7 +480,7 @@
                     <div class="cq-card"><h4>Ordu</h4><p id="cq-army">100 ⚔️</p></div>
                     <div class="cq-card"><h4>Teknoloji</h4><p id="cq-tech">T1 🔬</p></div>
                 </div>
-                <div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">
+                <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin-bottom:15px;">
                     <button class="cq-btn" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
                     <button class="cq-btn" onclick="cqUpgrade()">Geliş (-300💰)</button>
                     <button class="cq-btn" onclick="cqTax()">Vergi Al 💰</button>
@@ -486,10 +545,9 @@
             }
         }
         window.addEventListener('hashchange', checkAdminHash);
-        window.addEventListener('load', checkAdminHash);
 
         function openAdminPanel() {
-            document.getElementById('menu-toggle-btn').style.display = 'none'; // Admin panelindeyken hamburger gizlenir
+            document.getElementById('menu-toggle-btn').style.display = 'none'; 
             closeSidebarMenu();
             
             const clicksTbody = document.getElementById('admin-clicks-tbody');
@@ -515,7 +573,7 @@
 
         function closeAdminPanel() {
             document.getElementById('popup-admin').style.display = 'none';
-            document.getElementById('menu-toggle-btn').style.display = 'flex'; // Geri dönüldüğünde buton açılır
+            document.getElementById('menu-toggle-btn').style.display = 'flex'; 
             window.location.hash = ''; 
         }
 
@@ -646,10 +704,39 @@
             }, 350);
         }
 
-        // --- INTRO VE OYUN MOTORLARI ---
-        setTimeout(() => { document.getElementById('portal-element').style.transform = 'scale(0.4)'; document.getElementById('characters-element').style.display = 'block'; }, 1500);
-        setTimeout(() => { document.getElementById('portal-element').style.display = 'none'; document.getElementById('characters-element').style.display = 'none'; document.getElementById('tekkur-yazisi').style.display = 'block'; }, 3200);
-        setTimeout(() => { document.getElementById('intro-container').style.transition = 'opacity 0.5s'; document.getElementById('intro-container').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; document.getElementById('menu-toggle-btn').style.display = 'flex'; }, 500); }, 5000);
+        // --- SAYFA AÇILIŞ/YÜKLENİŞ KONTROLLERİ VE INTRO MOTORU ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Eğer URL sonu admin ise introyu gösterme, direkt paneli aç
+            if (window.location.hash === '#admin') {
+                document.getElementById('intro-container').style.display = 'none';
+                openAdminPanel();
+            } else {
+                // Admin değilse normal açılış introsunu başlat
+                startIntroAnimations();
+            }
+        });
+
+        function startIntroAnimations() {
+            setTimeout(() => { 
+                document.getElementById('portal-element').style.transform = 'scale(0.4)'; 
+                document.getElementById('characters-element').style.display = 'block'; 
+            }, 1500);
+            
+            setTimeout(() => { 
+                document.getElementById('portal-element').style.display = 'none'; 
+                document.getElementById('characters-element').style.display = 'none'; 
+                document.getElementById('tekkur-yazisi').style.display = 'block'; 
+            }, 3200);
+            
+            setTimeout(() => { 
+                document.getElementById('intro-container').style.transition = 'opacity 0.5s'; 
+                document.getElementById('intro-container').style.opacity = '0'; 
+                setTimeout(() => { 
+                    document.getElementById('intro-container').style.display = 'none'; 
+                    document.getElementById('menu-toggle-btn').style.display = 'flex'; 
+                }, 500); 
+            }, 5000);
+        }
 
         // SATRANÇ
         let boardState = []; let selectedSquare = null; let currentTurn = 'W';
@@ -696,8 +783,8 @@
         }
         function checkAndDisplayShah() {
             let wk = null, bk = null;
-            for(let r=0;r<8;r++)for(let c=0;c<8;c++){ if(boardState[r][c]==='♔')wk={r,c}; if(boardState[r][c]==='♚')bk={r,c}; }
-            for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+            for(let r=0; r<8; r++)for(let c=0; c<8; c++){ if(boardState[r][c]==='♔')wk={r,c}; if(boardState[r][c]==='♚')bk={r,c}; }
+            for(let r=0; r<8; r++)for(let c=0; c<8; c++){
                 let p = boardState[r][c]; if(p==='')continue;
                 if(WHITE_PIECES.includes(p) && bk && validateMove(r,c,bk.r,bk.c)) { document.getElementById('chess-status').textContent="ŞAH!"; return; }
                 if(BLACK_PIECES.includes(p) && wk && validateMove(r,c,wk.r,wk.c)) { document.getElementById('chess-status').textContent="ŞAH!"; return; }
@@ -729,7 +816,17 @@
         function startTennisGame() {
             const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
             let ballX = 350, ballY = 200, speedX = 5, speedY = 5; let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
-            canvas.onmousemove = (e) => { let rect = canvas.getBoundingClientRect(); pY = e.clientY - rect.top - pHeight / 2; };
+            
+            // Mobil dokunmatik ve masaüstü mouse desteği eşzamanlı
+            const handleMove = (clientY) => {
+                let rect = canvas.getBoundingClientRect();
+                let scaleY = canvas.height / rect.height; // Ekran küçüldüğünde raketin doğru yerde kalması için oranlama
+                pY = (clientY - rect.top) * scaleY - pHeight / 2;
+            };
+            
+            canvas.onmousemove = (e) => { handleMove(e.clientY); };
+            canvas.ontouchmove = (e) => { if(e.touches.length > 0) { handleMove(e.touches[0].clientY); e.preventDefault(); } };
+            
             clearInterval(pongInterval);
             pongInterval = setInterval(() => {
                 if(document.getElementById('popup-tennis').style.display !== 'flex') { clearInterval(pongInterval); return; }
@@ -783,6 +880,22 @@
             document.onkeydown = (e) => {
                 if (e.key === 'ArrowLeft' && dx === 0) { dx = -boxSize; dy = 0; } else if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -boxSize; } else if (e.key === 'ArrowRight' && dx === 0) { dx = boxSize; dy = 0; } else if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = boxSize; }
             };
+            
+            // Mobil kaydırma (Swipe) hareket algılayıcıları
+            let touchStartX = 0, touchStartY = 0;
+            canvas.ontouchstart = (e) => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; };
+            canvas.ontouchmove = (e) => {
+                if (!touchStartX || !touchStartY) return;
+                let diffX = e.touches[0].clientX - touchStartX;
+                let diffY = e.touches[0].clientY - touchStartY;
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX > 0 && dx === 0) { dx = boxSize; dy = 0; } else if (diffX < 0 && dx === 0) { dx = -boxSize; dy = 0; }
+                } else {
+                    if (diffY > 0 && dy === 0) { dx = 0; dy = boxSize; } else if (diffY < 0 && dy === 0) { dx = 0; dy = -boxSize; }
+                }
+                touchStartX = 0; touchStartY = 0; e.preventDefault();
+            };
+
             clearInterval(snakeInterval);
             snakeInterval = setInterval(() => {
                 if(document.getElementById('popup-snake').style.display !== 'flex') { clearInterval(snakeInterval); return; }
@@ -829,7 +942,7 @@
         }
         function cqRecruit() { if(cqGold >= 100) { cqGold -= 100; cqArmy += (40 + cqTech*15); cqLog("Orduya yeni savaşçılar katıldı."); cqUpdateUI(); } else cqLog("Hazine yetersiz!"); }
         function cqUpgrade() { if(cqGold >= 300) { cqGold -= 300; cqTech++; cqLog("Teknoloji seviyesi yükseltildi."); cqUpdateUI(); } else cqLog("Gelişim için yeterli altın yok!"); }
-        function cqTax() { let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain; cqLog("Vergiler alındı: +" + gain + " 💰"); cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); }); cqUpdateUI(); }
+        function cqTax() { let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain; cqGold += gain; cqLog("Vergiler alındı: +" + gain + " 💰"); cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); }); cqUpdateUI(); }
         function cqAttack(id) {
             let e = cqEnemies.find(x => x.id === id); if(!e || cqArmy <= 0) return;
             let pPower = cqArmy * (1 + cqTech*0.2) * (Math.random()*0.4 + 0.8); let ePower = e.army * (Math.random()*0.4 + 0.8);
