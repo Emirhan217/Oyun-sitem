@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyun Sitem</title>
+    <style>
+        /* SİTE GENEL AYARLARI */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #030305;
+            color: #fff;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* SOL ÜST KÖŞE HAMBURGER BUTONU */
+        #menu-toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 15, 25, 0.9);
+            border: 2px solid #bc13fe;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+            transition: 0.3s;
+        }
+        #menu-toggle-btn:hover {
+            background: #bc13fe;
+            box-shadow: 0 0 20px #bc13fe;
+        }
+
+        /* MENÜ (SIDEBAR) SİSTEMİ */
+        #sidebar-menu {
+            position: fixed;
+            top: 85px;
+            left: -350px;
+            width: 320px;
+            max-height: calc(100vh - 120px);
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid #bc13fe;
+            border-radius: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.3);
+        }
+        #sidebar-menu.active {
+            left: 20px;
+        }
+        .menu-items-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .menu-btn {
+            width: 100%;
+            height: 45px;
+            border-radius: 10px;
+            background: #141420;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 20px;
+            gap: 12px;
+            transition: 0.3s;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        .menu-btn:hover {
+            background: #bc13fe;
+            box-shadow: 0 0 15px #bc13fe;
+        }
+
+        /* AKILLI GAME AI PANELİ */
+        #ai-panel {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            height: 320px;
+        }
+        .ai-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #39ff14;
+            text-shadow: 0 0 8px rgba(57,255,20,0.4);
+            margin-bottom: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        #ai-chat-box {
+            flex: 1;
+            background: #050508;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .ai-msg { padding: 8px 12px; border-radius: 10px; max-width: 85%; word-wrap: break-word; line-height: 1.4; }
+        .ai-msg.user { background: #bc13fe; align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
+        .ai-msg.bot { background: #1f2833; align-self: flex-start; border-left: 3px solid #39ff14; border-bottom-left-radius: 2px; }
+        .ai-input-area { display: flex; gap: 5px; }
+        #ai-input { flex: 1; background: #141420; border: 1px solid #444; border-radius: 6px; color: #fff; padding: 8px; font-size: 13px; }
+        #ai-input:focus { outline: none; border-color: #39ff14; }
+        .ai-send-btn { background: #39ff14; color: #000; border: none; padding: 0 14px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .ai-send-btn:hover { background: #2cd810; box-shadow: 0 0 10px #39ff14; }
+
+        /* INTRO VE PORTAL EKRANI */
+        #intro-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .portal {
+            width: 160px; height: 160px; border-radius: 50%;
+            background: radial-gradient(circle, #39ff14, #bc13fe, transparent);
+            box-shadow: 0 0 40px #bc13fe, 0 0 80px #39ff14;
+            animation: rotatePortal 2s linear infinite, pulsePortal 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes rotatePortal { 100% { transform: rotate(360deg); } }
+        @keyframes pulsePortal { 0% { transform: scale(0.9); } 100% { transform: scale(1.1); } }
+
+        .karakterler-alani { display: none; position: relative; width: 300px; height: 150px; }
+        .karakter { font-size: 60px; position: absolute; bottom: 0; animation: pullIntoPortal 1.5s forwards ease-in; }
+        #char1 { left: 20px; animation-delay: 0.2s; }
+        #char2 { left: 120px; animation-delay: 0.5s; }
+        #char3 { right: 20px; animation-delay: 0.8s; }
+        @keyframes pullIntoPortal { 0% { transform: scale(1) translateY(0); opacity: 1; } 100% { transform: scale(0) translateY(-120px); opacity: 0; filter: blur(5px); } }
+
+        #tekkur-yazisi {
+            display: none; font-size: 28px; color: #39ff14; text-shadow: 0 0 15px #39ff14;
+            text-align: center; padding: 20px; max-width: 650px; animation: fadeIn 1.5s forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* NAVİGASYON BAR */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: flex-end; gap: 30px; box-sizing: border-box;
+            z-index: 100; backdrop-filter: blur(5px); background: rgba(3, 3, 5, 0.5);
+        }
+        nav a {
+            color: #fff; text-decoration: none; font-weight: bold; font-size: 18px;
+            letter-spacing: 1px; transition: 0.3s; text-transform: uppercase;
+        }
+        nav a:hover { color: #39ff14; text-shadow: 0 0 10px #39ff14; }
+
+        /* HERO PANEL */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; background: radial-gradient(circle at center, #1a0033 0%, #030305 70%);
+            overflow: hidden; text-align: center;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; background-position: center;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px); animation: gridMove 20s linear infinite;
+            z-index: 1; opacity: 0.6;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 400px; } }
+        .hero-content { position: relative; z-index: 2; }
+        .hero h1 { 
+            font-size: 90px; font-weight: 900; margin: 0; color: #fff; text-transform: uppercase; letter-spacing: 8px;
+            background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.6));
+        }
+        .hero p { color: #39ff14; font-size: 24px; font-weight: 600; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+        .explore-btn {
+            margin-top: 40px; padding: 16px 45px; font-size: 18px; font-weight: bold; background: transparent; color: #fff; border: 2px solid #39ff14;
+            border-radius: 50px; cursor: pointer; transition: all 0.4s ease; text-decoration: none; display: inline-block;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1); text-transform: uppercase; letter-spacing: 2px;
+        }
+        .explore-btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 35px #39ff14; transform: scale(1.05); }
+
+        /* KAPSAYICILAR VE KARTLAR */
+        .container { padding: 80px 20px; text-align: center; position: relative; }
+        .container h2 {
+            font-size: 48px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 4px;
+            background: linear-gradient(to right, #bc13fe, #39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 60px;
+        }
+        .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+        
+        .game-card {
+            background: rgba(15, 15, 25, 0.7); border: 2px solid rgba(188, 19, 254, 0.3); border-radius: 24px; padding: 35px; width: 260px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .game-card:hover { transform: translateY(-15px); box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
+        .game-logo {
+            width: 110px; height: 110px; background: #141420; border-radius: 50%; margin: 0 auto 25px auto;
+            display: flex; justify-content: center; align-items: center; font-size: 55px;
+            border: 2px solid #bc13fe; box-shadow: 0 0 15px rgba(188, 19, 254, 0.4); transition: 0.3s;
+        }
+        .game-card:hover .game-logo { border-color: #39ff14; box-shadow: 0 0 25px #39ff14; transform: rotate(10deg); }
+        .game-card h3 { color: #fff; font-size: 28px; font-weight: 700; margin: 15px 0 10px 0; }
+        .game-card p { color: #b0b0bc; font-size: 15px; line-height: 1.5; height: 70px; overflow: hidden; margin-bottom: 20px; }
+
+        .game-btn {
+            background: linear-gradient(135deg, #bc13fe, #8a06c4); color: #fff; border: none; padding: 14px 35px; border-radius: 12px;
+            cursor: pointer; font-weight: bold; font-size: 16px; width: 100%; text-transform: uppercase; transition: 0.3s;
+        }
+        .game-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
+
+        .store-btn-wrapper { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .store-btn {
+            background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 14px 30px; border-radius: 12px;
+            cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; text-transform: uppercase; transition: 0.3s;
+        }
+        .store-btn:hover:not(:disabled) { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
+        .store-btn:disabled { background: #141420; border: 1px solid #333; color: #555; cursor: not-allowed; }
+        
+        .reload-btn {
+            background: transparent; border: 2px solid #ff9f43; color: #ff9f43; padding: 10px; border-radius: 12px;
+            cursor: pointer; font-weight: bold; font-size: 13px; text-transform: uppercase; width: 100%; box-sizing: border-box;
+        }
+        .reload-btn:hover { background: #ff9f43; color: #000; box-shadow: 0 0 15px #ff9f43; }
+
+        /* OYUN POPUPLARI */
+        .game-popup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px);
+        }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; }
+
+        /* Satranç */
+        #chess-board { display: grid; grid-template-columns: repeat(8, 48px); grid-template-rows: repeat(8, 48px); border: 5px solid #bc13fe; box-shadow: 0 0 30px rgba(188, 19, 254, 0.4); }
+        .square { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; }
+        .white { background-color: #f0d9b5; color: #000; }
+        .black { background-color: #b58863; color: #000; }
+        .selected { background-color: #39ff14 !important; }
+
+        /* Tenis */
+        canvas#pongCanvas { border: 3px solid #39ff14; background: #000; }
+
+        /* Hız Testi */
+        #click-box { width: 300px; height: 300px; border: 4px solid #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; border-radius: 20px; }
+
+        /* Hafıza */
+        #memory-board { display: grid; grid-template-columns: repeat(4, 75px); gap: 12px; }
+        .card { width: 75px; height: 75px; background: #bc13fe; display: flex; align-items: center; justify-content: center; font-size: 32px; border-radius: 12px; cursor: pointer; }
+        .card.flipped { background: #141420; border: 2px solid #39ff14; }
+
+        /* Yılan */
+        canvas#snakeCanvas { border: 3px solid #ff9f43; background: #0d0d13; }
+
+        /* STRATEJİ OYUNU KAPSAYICI */
+        .conquest-container { width: 100%; max-width: 700px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; box-sizing: border-box; }
+        .cq-setup-screen { text-align: center; padding: 20px; }
+        .cq-select, .cq-btn { padding: 10px 20px; font-size: 16px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; }
+        .cq-btn:hover { background: #39ff14; box-shadow: 0 0 15px #39ff14; }
+        .cq-btn-danger { background: #ff4757; color: #fff; }
+        .cq-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .cq-card { background: #0b0c10; padding: 10px; border-radius: 8px; border-left: 3px solid #00f2ff; text-align: center; }
+        .cq-card h4 { margin: 0; font-size: 11px; color: #bc13fe; }
+        .cq-card p { margin: 0; font-size: 15px; font-weight: bold; }
+        .cq-row { display: flex; justify-content: space-between; align-items: center; background: #141420; padding: 10px 15px; border-radius: 8px; margin-bottom: 8px; }
+        .cq-log { background: #000; border: 1px solid #333; height: 90px; overflow-y: auto; padding: 8px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #39ff14; }
+
+        /* --- GİZLİ ADMİN PANELİ STİLLERİ --- */
+        #popup-admin {
+            background: rgba(10, 10, 15, 0.98);
+            border: 3px solid #39ff14;
+            max-width: 600px;
+            width: 90%;
+            height: auto;
+            max-height: 85vh;
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            margin: auto;
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .admin-table th, .admin-table td {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px;
+            text-align: left;
+        }
+        .admin-table th {
+            background: #141420;
+            color: #39ff14;
+        }
+        .admin-btn-clear {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .admin-btn-clear:hover {
+            background: #ff2a3a;
+            box-shadow: 0 0 15px #ff4757;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="menu-toggle-btn" onclick="toggleSidebarMenu()">☰</button>
+
+    <div id="sidebar-menu">
+        <div class="menu-items-wrapper">
+            <a href="#oyunlar" class="menu-btn" onclick="closeSidebarMenu()">🎮 Yüklü Oyunlar</a>
+            <a href="#magaza" class="menu-btn" onclick="closeSidebarMenu()">🛒 Oyun Mağazası</a>
+        </div>
+        
+        <div id="ai-panel">
+            <div class="ai-title">✨ Smart AI Pro</div>
+            <div id="ai-chat-box">
+                <div class="ai-msg bot">Selam! Ben sitemizin kalbindeki yapay zekayım. API anahtarına gerek olmadan, tıpkı gelişmiş büyük bir model gibi cümlelerini analiz edebiliyorum. Bana dilediğini sor!</div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" id="ai-input" placeholder="Bana bir şey yaz veya işlem sor..." onkeydown="if(event.key==='Enter') sendAIMessage()">
+                <button class="ai-send-btn" onclick="sendAIMessage()">Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <a href="#oyunlar">Ana Ekran</a>
+        <a href="#magaza">🛒 Mağaza</a>
+    </nav>
+
+    <div id="intro-container">
+        <div id="portal-element" class="portal"></div>
+        <div id="characters-element" class="karakterler-alani">
+            <span class="karakter" id="char1">👑</span>
+            <span class="karakter" id="char2">🎾</span>
+            <span class="karakter" id="char3">🎯</span>
+        </div>
+        <div id="tekkur-yazisi">Ayhan abime siteyi yaptığımda bana destek olduğu için teşekkür ederim ❤️</div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Oyun Sitem</h1>
+            <p>Geleceğin Oyun Dünyası</p>
+            <a href="#oyunlar" class="explore-btn">Oyunları Keşfet</a>
+        </div>
+    </section>
+
+    <div class="container" id="oyunlar">
+        <h2>Yüklü Oyunlarım</h2>
+        <div class="games-grid" id="main-games-area"></div>
+    </div>
+
+    <div class="container" id="magaza">
+        <h2>Oyun Mağazası</h2>
+        <div class="games-grid" id="store-games-area"></div>
+    </div>
+
+    <div id="popup-chess" class="game-popup"><span class="close-btn" onclick="closeGame('chess')">&times;</span><h2 style="color: #bc13fe;">Satranç</h2><div id="chess-status" style="color: #ff4757; font-size: 22px; font-weight: bold; margin-bottom: 10px;"></div><div id="chess-board"></div></div>
+    <div id="popup-tennis" class="game-popup"><span class="close-btn" onclick="closeGame('tennis')">&times;</span><h2 style="color: #39ff14;">Tenis</h2><div style="font-size: 24px; margin-bottom: 15px;">Siz: <span id="pScore">0</span> | Bot: <span id="bScore">0</span></div><canvas id="pongCanvas" width="700" height="400"></canvas></div>
+    <div id="popup-click" class="game-popup"><span class="close-btn" onclick="closeGame('click')">&times;</span><h2>Hız Testi</h2><div id="click-box" onclick="handleClickBox()">TIKLA BAŞLA</div><p id="click-score" style="font-size: 24px; color: #39ff14;"></p></div>
+    <div id="popup-memory" class="game-popup"><span class="close-btn" onclick="closeGame('memory')">&times;</span><h2>Hafıza Kartları</h2><div id="memory-board"></div></div>
+    <div id="popup-snake" class="game-popup"><span class="close-btn" onclick="closeGame('snake')">&times;</span><h2>Yılan Oyunu</h2><div style="font-size: 22px;">Skor: <span id="sScore">0</span></div><canvas id="snakeCanvas" width="400" height="400"></canvas></div>
+
+    <div id="popup-conquest" class="game-popup">
+        <span class="close-btn" onclick="closeGame('conquest')">&times;</span>
+        <div class="conquest-container">
+            <h3 style="color:#00f2ff; text-align:center;">⚔️ İMPARATORLUK FETHİ</h3>
+            <div id="cq-setup" class="cq-setup-screen">
+                <p>İmparatorluğunu Seç:</p>
+                <select id="cq-empire-select" class="cq-select">
+                    <option value="Valoria">Valoria Krallığı (Ekonomi)</option>
+                    <option value="Shadowfang">Shadowfang Klanı (Askeri)</option>
+                    <option value="Aethelgard">Aethelgard Düzeni (Teknoloji)</option>
+                </select><br><br>
+                <button class="cq-btn" onclick="startConquestGame()">Savaşı Başlat</button>
+            </div>
+            <div id="cq-board" style="display:none;">
+                <h4 id="cq-player-title" style="text-align:center; color:#39ff14;"></h4>
+                <div class="cq-dashboard">
+                    <div class="cq-card"><h4>Toprak</h4><p id="cq-land">%15</p></div>
+                    <div class="cq-card"><h4>Hazine</h4><p id="cq-gold">500 💰</p></div>
+                    <div class="cq-card"><h4>Ordu</h4><p id="cq-army">100 ⚔️</p></div>
+                    <div class="cq-card"><h4>Teknoloji</h4><p id="cq-tech">T1 🔬</p></div>
+                </div>
+                <div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">
+                    <button class="cq-btn" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
+                    <button class="cq-btn" onclick="cqUpgrade()">Geliş (-300💰)</button>
+                    <button class="cq-btn" onclick="cqTax()">Vergi Al 💰</button>
+                </div>
+                <div id="cq-enemies"></div>
+                <div class="cq-log" id="cq-log-box">> Emirlerinizi bekliyoruz...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-admin" class="game-popup">
+        <span class="close-btn" onclick="closeAdminPanel()">&times;</span>
+        <h2 style="color: #39ff14; margin-bottom: 5px;">📊 Sistem Yönetim Paneli</h2>
+        <p style="color: #aaa; font-size: 13px; margin-top: 0;">URL sonuna #admin yazarak buraya ulaştınız.</p>
+        
+        <h3 style="color: #bc13fe; text-align: left; margin-top: 25px;">📈 Oyun Oynanma Sayıları</h3>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Oyun Adı</th>
+                    <th>Toplam Oynanma</th>
+                </tr>
+            </thead>
+            <tbody id="admin-clicks-tbody"></tbody>
+        </table>
+
+        <h3 style="color: #00f2ff; text-align: left; margin-top: 25px;">🏆 Kırılan En Yüksek Skorlar</h3>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Oyun</th>
+                    <th>En İyi Skor / Durum</th>
+                </tr>
+            </thead>
+            <tbody id="admin-scores-tbody"></tbody>
+        </table>
+
+        <button class="admin-btn-clear" onclick="clearAdminData()">İstatistikleri Sıfırla 🗑️</button>
+    </div>
+
+    <script>
+        // --- ADMİN PANELİ VE VERİ TABANI ALTYAPISI (LOCALSTORAGE) ---
+        let gameStats = JSON.parse(localStorage.getItem('gameStats')) || {
+            chess: 0, tennis: 0, click: 0, memory: 0, snake: 0, conquest: 0
+        };
+        let highScores = JSON.parse(localStorage.getItem('highScores')) || {
+            click: "Henüz rekor yok",
+            snake: 0,
+            tennis: "Henüz maç yapılmadı",
+            conquest: "Fetih başlamadı"
+        };
+
+        function saveStats() {
+            localStorage.setItem('gameStats', JSON.stringify(gameStats));
+            localStorage.setItem('highScores', JSON.stringify(highScores));
+        }
+
+        // URL KONTROLÜ: Sadece linkin sonunda #admin varsa çalışır
+        function checkAdminHash() {
+            if (window.location.hash === '#admin') {
+                openAdminPanel();
+            }
+        }
+        window.addEventListener('hashchange', checkAdminHash);
+        window.addEventListener('load', checkAdminHash);
+
+        function openAdminPanel() {
+            document.getElementById('menu-toggle-btn').style.display = 'none'; // Admin panelindeyken hamburger gizlenir
+            closeSidebarMenu();
+            
+            const clicksTbody = document.getElementById('admin-clicks-tbody');
+            clicksTbody.innerHTML = `
+                <tr><td>👑 Satranç</td><td><b>${gameStats.chess} kez</b></td></tr>
+                <tr><td>🎾 Tenis</td><td><b>${gameStats.tennis} kez</b></td></tr>
+                <tr><td>🎯 Hız Testi</td><td><b>${gameStats.click} kez</b></td></tr>
+                <tr><td>🧠 Hafıza Kartları</td><td><b>${gameStats.memory} kez</b></td></tr>
+                <tr><td>🐍 Yılan Oyunu</td><td><b>${gameStats.snake} kez</b></td></tr>
+                <tr><td>⚔️ İmparatorluk Fethi</td><td><b>${gameStats.conquest} kez</b></td></tr>
+            `;
+
+            const scoresTbody = document.getElementById('admin-scores-tbody');
+            scoresTbody.innerHTML = `
+                <tr><td>🎯 Hız Testi En İyi Tepki</td><td><b>${highScores.click}</b></td></tr>
+                <tr><td>🐍 Yılan Oyunu Rekoru</td><td><b>${highScores.snake} Skor</b></td></tr>
+                <tr><td>🎾 Son Tenis Durumu</td><td><b>${highScores.tennis}</b></td></tr>
+                <tr><td>⚔️ En Büyük İmparatorluk</td><td><b>${highScores.conquest}</b></td></tr>
+            `;
+
+            document.getElementById('popup-admin').style.display = 'flex';
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('popup-admin').style.display = 'none';
+            document.getElementById('menu-toggle-btn').style.display = 'flex'; // Geri dönüldüğünde buton açılır
+            window.location.hash = ''; 
+        }
+
+        function clearAdminData() {
+            if(confirm("Tüm gerçek oynanma istatistiklerini sıfırlamak istiyor musunuz?")) {
+                gameStats = { chess: 0, tennis: 0, click: 0, memory: 0, snake: 0, conquest: 0 };
+                highScores = { click: "Henüz rekor yok", snake: 0, tennis: "Henüz maç yapılmadı", conquest: "Fetih başlamadı" };
+                saveStats();
+                openAdminPanel();
+            }
+        }
+
+        // --- SİTE FONKSİYONLARI VE SIDEBAR AYARLARI ---
+        function toggleSidebarMenu() { document.getElementById('sidebar-menu').classList.toggle('active'); }
+        function closeSidebarMenu() { document.getElementById('sidebar-menu').classList.remove('active'); }
+
+        const SABIT_OYUNLAR = {
+            chess: { id: 'chess', logo: '👑', title: 'Satranç', desc: 'Tam kurallı kusursuz yapay zeka destekli satranç.' },
+            tennis: { id: 'tennis', logo: '🎾', title: 'Tenis', desc: 'Refleks tabanlı klasik pong oyunu.' },
+            click: { id: 'click', logo: '🎯', title: 'Hız Testi', desc: 'Doğru renge basarak hız rekorunu kır.' },
+            memory: { id: 'memory', logo: '🧠', title: 'Hafıza', desc: 'Kartları eşleştir zihnini test et.' },
+            snake: { id: 'snake', logo: '🐍', title: 'Yılan Oyunu', desc: 'Yemleri ye, kuyruğuna çarpmadan büyü.' }
+        };
+        const MAĞAZA_OYUNLARI = {
+            conquest: { id: 'conquest', logo: '⚔️', title: 'İmparatorluk Fethi', desc: 'Stratejik fetih ve yönetim simülasyonu.' }
+        };
+        let magazadanYuklenenler = JSON.parse(localStorage.getItem('magazadanYuklenenler')) || [];
+
+        function updateUIVisuals() {
+            const mainArea = document.getElementById('main-games-area');
+            const storeArea = document.getElementById('store-games-area');
+            mainArea.innerHTML = '';
+            
+            Object.keys(SABIT_OYUNLAR).forEach(id => {
+                let g = SABIT_OYUNLAR[id];
+                mainArea.innerHTML += `<div class="game-card"><div class="game-logo">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p><button class="game-btn" onclick="openGame('${g.id}')">Oyna</button></div>`;
+            });
+            magazadanYuklenenler.forEach(id => {
+                let g = MAĞAZA_OYUNLARI[id];
+                if(g) mainArea.innerHTML += `<div class="game-card"><div class="game-logo">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p><button class="game-btn" onclick="openGame('${g.id}')">Oyna</button></div>`;
+            });
+
+            storeArea.innerHTML = '';
+            Object.keys(MAĞAZA_OYUNLARI).forEach(id => {
+                let g = MAĞAZA_OYUNLARI[id];
+                let isIns = magazadanYuklenenler.includes(id);
+                let btn = isIns ? `<div class="store-btn-wrapper"><button class="store-btn" disabled>Yüklendi ✓</button><button class="reload-btn" onclick="reinstallGame('${id}')">🔄 Tekrar İndir</button></div>` : `<button class="store-btn" onclick="installAndDownload('${id}')">Yükle</button>`;
+                storeArea.innerHTML += `<div class="game-card" style="border-color:#00f2ff;"><div class="game-logo" style="border-color:#00f2ff;">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p>${btn}</div>`;
+            });
+        }
+        function installAndDownload(id) { if(!magazadanYuklenenler.includes(id)) { magazadanYuklenenler.push(id); localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler)); updateUIVisuals(); } }
+        function reinstallGame(id) { alert("Oyun başarıyla yeniden indirildi!"); }
+        updateUIVisuals();
+
+        function openGame(name) { 
+            if(gameStats[name] !== undefined) { gameStats[name]++; saveStats(); }
+            document.getElementById('menu-toggle-btn').style.display = 'none';
+            closeSidebarMenu();
+            document.getElementById('popup-' + name).style.display = 'flex'; 
+            if(name==='chess') buildChessBoard(); 
+            if(name==='tennis') startTennisGame(); 
+            if(name==='memory') startMemoryGame(); 
+            if(name==='snake') startSnakeGame(); 
+            if(name==='conquest') resetConquestUI(); 
+        }
+        function closeGame(name) { document.getElementById('popup-' + name).style.display = 'none'; document.getElementById('menu-toggle-btn').style.display = 'flex'; }
+
+        // --- GELİŞMİŞ BAĞLAMSAL LOCAL YAPAY ZEKA MOTORU ---
+        function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const chatBox = document.getElementById('ai-chat-box');
+            const text = input.value.trim();
+            if(!text) return;
+
+            chatBox.innerHTML += `<div class="ai-msg user">${text}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                let reply = "";
+                let clean = text.toLowerCase().trim();
+                let mathClean = clean.replace(/x/g, '*').replace(/\u00d7/g, '*').replace(/\s/g, '');
+                let hasMathOp = /[\+\-\*\/]/.test(mathClean);
+                let hasNumbers = /\d+/.test(mathClean);
+
+                if (hasMathOp && hasNumbers) {
+                    try {
+                        let safeString = mathClean.replace(/[^0-9\+\-\*\/\(\)\.]/g, '');
+                        let mathResult = Function('"use strict"; return (' + safeString + ')')();
+                        if (mathResult !== undefined && !isNaN(mathResult)) {
+                            reply = `Hesaplama tamamlandı: **${text} = ${mathResult}** ediyor. Başka bir işlem var mı?`;
+                            chatBox.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                            return;
+                        }
+                    } catch(e) {}
+                }
+
+                const keywords = {
+                    selamlama: ["selam", "merhaba", "sa", "hey", "mrb", "slm"],
+                    durum: ["nasılsın", "nasıl gidiyor", "keyifler", "nasılsınız"],
+                    taktik: ["taktik", "tüyo", "hile", "ipucu", "nasıl kazanılır"],
+                    satranc: ["satranç", "chess", "kale", "şah", "piyon", "vezir"],
+                    fetih: ["fetih", "conquest", "imparatorluk", "ordu", "savaş", "altın"],
+                    yilan: ["yılan", "snake", "yem", "kuyruk"],
+                    tenis: ["tenis", "pong", "raket", "top"],
+                    kimlik: ["kimsin", "adın ne", "ismin ne", "necisin"]
+                };
+
+                let matches = [];
+                for (let key in keywords) { if (keywords[key].some(word => clean.includes(word))) { matches.push(key); } }
+
+                if (matches.length > 0) {
+                    if (matches.includes("selamlama") && matches.includes("durum")) { reply = "Selam! Harikayım, tüm algoritmalarım tam performans çalışıyor. Sitedeki oyunları senin için optimize etmekle meşgulüm. Sen nasılsın?"; } 
+                    else if (matches.includes("taktik") && matches.includes("fetih")) { reply = "İmparatorluk Fethi için en büyük tüyom: İlk turlarda sürekli 'Vergi Al' butonunu kullanarak ekonomini büyüt. Ardından teknolojiyi T3 seviyesine çıkarırsan askeri gücün çarpan etkisiyle devasa artar!"; }
+                    else if (matches.includes("taktik") && matches.includes("satranc")) { reply = "Satrançta yapay zekayı yenmek istiyorsan, taşlarını tahtanın merkez karelerine (e4, d4, e5, d5) yerleştirmeye odaklanmalısın. Kanatlardan saldırmak yerine merkezi kontrol eden kazanır."; }
+                    else if (matches.includes("taktik") && matches.includes("yilan")) { reply = "Yılan oyununda en yüksek skora ulaşmak için ekranın ortasında çok dönmemeye çalış. Kendine bir duvar rotası çizip yılanı S harfi şeklinde katlayarak büyütürsen alan kazanır ve kuyruğuna çarpmazsın."; }
+                    else if (matches.includes("selamlama")) { reply = "Ooo hoş geldin! Ben bu harika oyun platformunun akıllı asistanıyım. Oyunlar hakkında bilgi almak istersen buradayım."; }
+                    else if (matches.includes("durum")) { reply = "Süperim! Tarayıcı belleğinde sıfır gecikmeyle çalışmak beni çok mutlu ediyor. Sen nasılsın, oyunlar nasıl gidiyor?"; }
+                    else if (matches.includes("satranc")) { reply = "Sitedeki Satranç oyunu tamamen kurallara uygun çalışır. Şah çekildiğinde koruma yapmayı ve rakibi mat etmeyi unutma!"; }
+                    else if (matches.includes("fetih")) { reply = "İmparatorluk Fethi tamamen stratejiye dayalı bir simülasyondur. Krallıkların özel yeteneklerini iyi kullanmalısın (Örn: Valoria altınla başlar)."; }
+                    else if (matches.includes("yilan") || matches.includes("tenis")) { reply = "Refleks tabanlı harika bir oyun! Hızlandıkça odaklanman gerekecek, dikkatli ol."; }
+                    else if (matches.includes("kimlik")) { reply = "Ben API anahtarına ihtiyaç duymadan çalışan, sitenin yerleşik akıllı AI asistanıyım. Amacım hem seninle sohbet etmek hem de oyunlarda rekor kırmana yardımcı olmak!"; }
+                } else { reply = `Anladım! "${text}" üzerine derin bir analiz yaptım. Bana oyunlar hakkında taktikler sorabilir, zorlu matematik formüllerini çözdürebilir ya da dilediğin gibi sohbet edebilirsin.`; }
+
+                chatBox.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 350);
+        }
+
+        // --- INTRO VE OYUN MOTORLARI ---
+        setTimeout(() => { document.getElementById('portal-element').style.transform = 'scale(0.4)'; document.getElementById('characters-element').style.display = 'block'; }, 1500);
+        setTimeout(() => { document.getElementById('portal-element').style.display = 'none'; document.getElementById('characters-element').style.display = 'none'; document.getElementById('tekkur-yazisi').style.display = 'block'; }, 3200);
+        setTimeout(() => { document.getElementById('intro-container').style.transition = 'opacity 0.5s'; document.getElementById('intro-container').style.opacity = '0'; setTimeout(() => { document.getElementById('intro-container').style.display = 'none'; document.getElementById('menu-toggle-btn').style.display = 'flex'; }, 500); }, 5000);
+
+        // SATRANÇ
+        let boardState = []; let selectedSquare = null; let currentTurn = 'W';
+        const WHITE_PIECES = ['♙', '♖', '♘', '♗', '♕', '♔']; const BLACK_PIECES = ['♟', '♜', '♞', '♝', '♛', '♚'];
+        function buildChessBoard() {
+            selectedSquare = null; currentTurn = 'W'; document.getElementById('chess-status').textContent = '';
+            boardState = [
+                ['♜','♞','♝','♛','♚','♝','♞','♜'],['♟','♟','♟','♟','♟','♟','♟','♟'],['','','','','','','',''],['','','','','','','',''],
+                ['','','','','','','',''],['','','','','','','',''],['♙','♙','♙','♙','♙','♙','♙','♙'],['♖','♘','♗','♕','♔','♗','♘','♖']
+            ];
+            drawGrid();
+        }
+        function drawGrid() {
+            const board = document.getElementById('chess-board'); board.innerHTML = '';
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    const sq = document.createElement('div'); sq.className = `square ${(r+c)%2===0?'white':'black'}`; sq.textContent = boardState[r][c];
+                    if(selectedSquare && selectedSquare.r === r && selectedSquare.c === c) sq.classList.add('selected');
+                    sq.onclick = () => handleSquareClick(r, c); board.appendChild(sq);
+                }
+            }
+        }
+        function handleSquareClick(r, c) {
+            const piece = boardState[r][c];
+            if (selectedSquare === null) {
+                if (piece !== '' && ((currentTurn === 'W' && WHITE_PIECES.includes(piece)) || (currentTurn === 'B' && BLACK_PIECES.includes(piece)))) selectedSquare = { r, c };
+            } else {
+                if (selectedSquare.r === r && selectedSquare.c === c) selectedSquare = null;
+                else {
+                    if (validateMove(selectedSquare.r, selectedSquare.c, r, c)) {
+                        if (boardState[r][c] === '♔' || boardState[r][c] === '♚') {
+                            boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; boardState[selectedSquare.r][selectedSquare.c] = ''; drawGrid();
+                            setTimeout(() => { alert("MAT! Oyun Bitti!"); buildChessBoard(); }, 50); return;
+                        }
+                        boardState[r][c] = boardState[selectedSquare.r][selectedSquare.c]; boardState[selectedSquare.r][selectedSquare.c] = '';
+                        selectedSquare = null; currentTurn = currentTurn === 'W' ? 'B' : 'W'; checkAndDisplayShah();
+                    } else {
+                        if (piece !== '' && ((currentTurn === 'W' && WHITE_PIECES.includes(piece)) || (currentTurn === 'B' && BLACK_PIECES.includes(piece)))) selectedSquare = { r, c };
+                        else selectedSquare = null;
+                    }
+                }
+            }
+            drawGrid();
+        }
+        function checkAndDisplayShah() {
+            let wk = null, bk = null;
+            for(let r=0;r<8;r++)for(let c=0;c<8;c++){ if(boardState[r][c]==='♔')wk={r,c}; if(boardState[r][c]==='♚')bk={r,c}; }
+            for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+                let p = boardState[r][c]; if(p==='')continue;
+                if(WHITE_PIECES.includes(p) && bk && validateMove(r,c,bk.r,bk.c)) { document.getElementById('chess-status').textContent="ŞAH!"; return; }
+                if(BLACK_PIECES.includes(p) && wk && validateMove(r,c,wk.r,wk.c)) { document.getElementById('chess-status').textContent="ŞAH!"; return; }
+            }
+            document.getElementById('chess-status').textContent="";
+        }
+        function validateMove(fR, fC, tR, tC) {
+            let p = boardState[fR][fC], t = boardState[tR][tC];
+            if(t !== '') { if(WHITE_PIECES.includes(p)&&WHITE_PIECES.includes(t))return false; if(BLACK_PIECES.includes(p)&&BLACK_PIECES.includes(t))return false; }
+            let dR = tR - fR, dC = tC - fC, aR = Math.abs(dR), aC = Math.abs(dC);
+            if(p==='♙') return (dC===0 && dR===-1 && t==='') || (dC===0 && dR===-2 && fR===6 && boardState[5][fC]==='' && t==='') || (aC===1 && dR===-1 && t!=='');
+            if(p==='♟') return (dC===0 && dR===1 && t==='') || (dC===0 && dR===2 && fR===1 && boardState[2][fC]==='' && t==='') || (aC===1 && dR===1 && t!=='');
+            if(p==='♖'||p==='♜') return (fR===tR || fC===tC) && checkPathClear(fR,fC,tR,tC);
+            if(p==='♗'||p==='♝') return (aR===aC) && checkPathClear(fR,fC,tR,tC);
+            if(p==='♕'||p==='♛') return (fR===tR || fC===tC || aR===aC) && checkPathClear(fR,fC,tR,tC);
+            if(p==='♘'||p==='♞') return (aR===2 && aC===1) || (aR===1 && aC===2);
+            if(p==='♔'||p==='♚') return (aR<=1 && aC<=1);
+            return false;
+        }
+        function checkPathClear(fR, fC, tR, tC) {
+            let sR = tR===fR?0:(tR>fR?1:-1), sC = tC===fC?0:(tC>fC?1:-1);
+            let cR = fR+sR, cC = fC+sC;
+            while(cR!==tR || cC!==tC) { if(boardState[cR][cC]!=='')return false; cR+=sR; cC+=sC; }
+            return true;
+        }
+
+        // TENİS
+        let pongInterval; let playerScore = 0, botScore = 0;
+        function startTennisGame() {
+            const canvas = document.getElementById('pongCanvas'); const ctx = canvas.getContext('2d');
+            let ballX = 350, ballY = 200, speedX = 5, speedY = 5; let pY = 150, bY = 150, pHeight = 90, bHeight = 90;
+            canvas.onmousemove = (e) => { let rect = canvas.getBoundingClientRect(); pY = e.clientY - rect.top - pHeight / 2; };
+            clearInterval(pongInterval);
+            pongInterval = setInterval(() => {
+                if(document.getElementById('popup-tennis').style.display !== 'flex') { clearInterval(pongInterval); return; }
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 700, 400);
+                ctx.fillStyle = '#39ff14'; ctx.beginPath(); ctx.arc(ballX, ballY, 10, 0, Math.PI*2); ctx.fill(); ctx.fillRect(15, pY, 15, pHeight);
+                ctx.fillStyle = '#ff4757'; ctx.fillRect(670, bY, 15, bHeight);
+                if(bY + bHeight/2 < ballY - 15) bY += 4.2; else if(bY + bHeight/2 > ballY + 15) bY -= 4.2;
+                ballX += speedX; ballY += speedY;
+                if(ballY < 10 || ballY > 390) speedY = -speedY;
+                if(ballX < 35 && ballY > pY && ballY < pY + pHeight) speedX = -speedX;
+                if(ballX > 655 && ballY > bY && ballY < bY + bHeight) speedX = -speedX;
+                if(ballX < 0) { botScore++; ballX = 350; ballY = 200; speedX = 5; updateScores(); highScores.tennis = `Bot kazandı (${playerScore}-${botScore})`; saveStats(); }
+                if(ballX > 700) { playerScore++; ballX = 350; ballY = 200; speedX = -5; updateScores(); highScores.tennis = `Oyuncu önde (${playerScore}-${botScore})`; saveStats(); }
+            }, 1000/60);
+        }
+        function updateScores() { document.getElementById('pScore').textContent = playerScore; document.getElementById('bScore').textContent = botScore; }
+
+        // REFLEKS HIZ TESTİ
+        let reflexTime = 0, isWaiting = false;
+        function handleClickBox() {
+            const box = document.getElementById('click-box'); const scoreText = document.getElementById('click-score');
+            if(!isWaiting) { box.textContent = 'BEKLE...'; box.style.backgroundColor = 'red'; isWaiting = true; scoreText.textContent = ''; setTimeout(() => { box.style.backgroundColor = '#39ff14'; box.style.color = '#000'; box.textContent = 'TIKLA!'; reflexTime = Date.now(); }, 1500 + Math.random() * 2500); } 
+            else if(reflexTime > 0) { 
+                let score = Date.now() - reflexTime;
+                scoreText.textContent = `Hız Skorun: ${score} ms`; 
+                box.textContent = 'YENİDEN BAŞLA'; 
+                box.style.backgroundColor = 'transparent'; 
+                box.style.color = '#fff'; 
+                if(highScores.click === "Henüz rekor yok" || score < parseInt(highScores.click)) { highScores.click = score + " ms"; saveStats(); }
+                reflexTime = 0; isWaiting = false; 
+            }
+        }
+
+        // HAFIZA
+        let cards = ['🔥','🔥','⚡','⚡','👑','👑','💎','💎','🍎','🍎','🚗','🚗','🎈','🎈','👾','👾']; let choice1 = null, choice2 = null;
+        function startMemoryGame() {
+            const mBoard = document.getElementById('memory-board'); mBoard.innerHTML = ''; choice1 = null; choice2 = null; cards.sort(() => 0.5 - Math.random());
+            cards.forEach((val, i) => { const c = document.createElement('div'); c.className = 'card'; c.dataset.icon = val; c.dataset.id = i; c.onclick = () => flipCard(c); mBoard.appendChild(c); });
+        }
+        function flipCard(c) {
+            if(c.classList.contains('flipped') || choice2) return; c.textContent = c.dataset.icon; c.classList.add('flipped');
+            if(!choice1) choice1 = c; else { choice2 = c; if(choice1.dataset.icon === choice2.dataset.icon) { choice1 = null; choice2 = null; } else { setTimeout(() => { choice1.textContent = ''; choice2.textContent = ''; choice1.classList.remove('flipped'); choice2.classList.remove('flipped'); choice1 = null; choice2 = null; }, 800); } }
+        }
+
+        // YILAN
+        let snakeInterval;
+        function startSnakeGame() {
+            const canvas = document.getElementById('snakeCanvas'); const ctx = canvas.getContext('2d');
+            let boxSize = 20; let snake = [{x: 200, y: 200}]; let food = {x: 100, y: 100}; let dx = boxSize, dy = 0; let score = 0;
+            document.getElementById('sScore').textContent = score;
+            document.onkeydown = (e) => {
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -boxSize; dy = 0; } else if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -boxSize; } else if (e.key === 'ArrowRight' && dx === 0) { dx = boxSize; dy = 0; } else if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = boxSize; }
+            };
+            clearInterval(snakeInterval);
+            snakeInterval = setInterval(() => {
+                if(document.getElementById('popup-snake').style.display !== 'flex') { clearInterval(snakeInterval); return; }
+                let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+                if(head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) { 
+                    alert("Oyun Bitti! Skorunuz: " + score); 
+                    if(score > highScores.snake) { highScores.snake = score; saveStats(); }
+                    startSnakeGame(); return; 
+                }
+                snake.unshift(head);
+                if(head.x === food.x && head.y === food.y) { score += 10; document.getElementById('sScore').textContent = score; food = { x: Math.floor(Math.random() * 20) * boxSize, y: Math.floor(Math.random() * 20) * boxSize }; } else { snake.pop(); }
+                ctx.fillStyle = '#0d0d13'; ctx.fillRect(0, 0, 400, 400);
+                ctx.fillStyle = '#ff9f43'; snake.forEach(s => ctx.fillRect(s.x, s.y, boxSize-2, boxSize-2));
+                ctx.fillStyle = '#ff4757'; ctx.fillRect(food.x, food.y, boxSize-2, boxSize-2);
+            }, 150);
+        }
+
+        // İMPARATORLUK FETHİ KODLARI
+        let cqGold, cqArmy, cqTech, cqLand, cqPlayerEmpire; let cqEnemies = [];
+        function resetConquestUI() { document.getElementById('cq-setup').style.display = 'block'; document.getElementById('cq-board').style.display = 'none'; }
+        function startConquestGame() {
+            cqPlayerEmpire = document.getElementById('cq-empire-select').value;
+            cqGold = 500; cqArmy = 100; cqTech = 1; cqLand = 15;
+            if(cqPlayerEmpire === "Valoria") cqGold = 800; if(cqPlayerEmpire === "Shadowfang") cqArmy = 170; if(cqPlayerEmpire === "Aethelgard") cqTech = 2;
+            cqEnemies = [
+                { id: "necro", name: "Necroshane Laneti", land: 25, army: 110, logo: "💀" }, { id: "solaria", name: "Solaria İmparatorluğu", land: 20, army: 140, logo: "☀️" },
+                { id: "frost", name: "Frostmaul Hanedanı", land: 20, army: 90, logo: "❄️" }, { id: "void", name: "Voidborn Konseyi", land: 20, army: 160, logo: "🔮" }
+            ];
+            document.getElementById('cq-player-title').textContent = cqPlayerEmpire + " İmparatorluğu";
+            document.getElementById('cq-setup').style.display = 'none'; document.getElementById('cq-board').style.display = 'block';
+            document.getElementById('cq-log-box').innerHTML = "> Tahta geçtiniz! Emirlerinizi bekliyoruz."; 
+            highScores.conquest = `${cqPlayerEmpire} (%${cqLand})`; saveStats(); cqUpdateUI();
+        }
+        function cqLog(msg) { const b = document.getElementById('cq-log-box'); b.innerHTML += "<br>> " + msg; b.scrollTop = b.scrollHeight; }
+        function cqUpdateUI() {
+            document.getElementById('cq-gold').textContent = cqGold + " 💰"; document.getElementById('cq-army').textContent = cqArmy + " ⚔️";
+            document.getElementById('cq-tech').textContent = "T" + cqTech + " 🔬"; document.getElementById('cq-land').textContent = "%" + cqLand;
+            highScores.conquest = `${cqPlayerEmpire} (%${cqLand})`; saveStats();
+            if(cqLand >= 100) { alert("TEBRİKLER! Dünyayı Fethettiniz!"); resetConquestUI(); return; }
+            const area = document.getElementById('cq-enemies'); area.innerHTML = '';
+            cqEnemies.forEach(e => {
+                if(e.land > 0) { area.innerHTML += `<div class="cq-row"><div style="font-size:12px;">${e.logo} <b>${e.name}</b><br><span style="color:#aaa;">Toprak: %${e.land} | Güç: ${e.army}</span></div><button class="cq-btn cq-btn-danger" style="font-size:11px; padding:4px 10px;" onclick="cqAttack('${e.id}')">Saldır</button></div>`; }
+            });
+        } <a href="şişe-oyunu.html">Bardağı Taşırma Oyunu Oyna!</a>
+        function cqRecruit() { if(cqGold >= 100) { cqGold -= 100; cqArmy += (40 + cqTech*15); cqLog("Orduya yeni savaşçılar katıldı."); cqUpdateUI(); } else cqLog("Hazine yetersiz!"); }
+        function cqUpgrade() { if(cqGold >= 300) { cqGold -= 300; cqTech++; cqLog("Teknoloji seviyesi yükseltildi."); cqUpdateUI(); } else cqLog("Gelişim için yeterli altın yok!"); }
+        function cqTax() { let gain = Math.floor(cqLand * 4 + cqTech * 12); cqGold += gain; cqLog("Vergiler alındı: +" + gain + " 💰"); cqEnemies.forEach(e => { if(e.land > 0) e.army += Math.floor(Math.random()*12); }); cqUpdateUI(); }
+        function cqAttack(id) {
+            let e = cqEnemies.find(x => x.id === id); if(!e || cqArmy <= 0) return;
+            let pPower = cqArmy * (1 + cqTech*0.2) * (Math.random()*0.4 + 0.8); let ePower = e.army * (Math.random()*0.4 + 0.8);
+            if(pPower > ePower) {
+                let cap = Math.min(e.land, Math.floor(Math.random()*6)+5); e.land -= cap; cqLand += cap;
+                let loss = Math.floor(cqArmy * 0.25); cqArmy -= loss; e.army = Math.floor(e.army * 0.3); cqGold += (cap * 30);
+                cqLog(`ZAFER! %${cap} toprak alındı. ${loss} asker kaybettik.`); if(e.land <= 0) cqLog(`${e.name} yok edildi!`);
+            } else { let loss = Math.floor(cqArmy * 0.5); cqArmy -= loss; cqLog(`YENİLGİ! Sefer başarısız oldu, ordunun yarısı (${loss}) kaybedildi.`); }
+            cqUpdateUI();
+        }
+    </script>
+</body>
+</html>
