@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İmparatorluk Fethi</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="İmp. Fethi">
+    
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%C4%B0mparatorluk%20Fethi%20Oyunu%22%2C%22short_name%22%3A%22%C4%B0mp.Fethi%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030305%22%2C%22theme_color%22%3A%22%23bc13fe%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Ccircle%20cx%3D%27256%27%20cy%3D%27256%27%20r%3D%27240%27%20fill%3D%27%2523bc13fe%27%2F%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%25%27%20font-size%3D%27200%27%20fill%3D%27white%27%20font-family%3D%27sans-serif%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27middle%27%3E%E2%9A%94%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #030305; color: #fff;
+            scroll-behavior: smooth; overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: flex-end; gap: 30px; box-sizing: border-box;
+            z-index: 100; backdrop-filter: blur(5px); background: rgba(3, 3, 5, 0.5);
+        }
+        nav a { color: #fff; text-decoration: none; font-weight: bold; font-size: 18px; text-transform: uppercase; }
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #1a0033 0%, #030305 70%); text-align: center; padding: 0 20px;
+        }
+        .hero h1 { font-size: 65px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 6px; background: linear-gradient(to bottom, #fff 40%, #e0b0ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: #39ff14; font-size: 22px; font-weight: 600; margin-top: 15px; text-transform: uppercase; }
+        .container { padding: 80px 20px; text-align: center; }
+        .container h2 { font-size: 42px; font-weight: 800; text-transform: uppercase; background: linear-gradient(to right, #bc13fe, #39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; }
+        .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+        .game-card { background: rgba(15, 15, 25, 0.7); border: 2px solid rgba(188, 19, 254, 0.3); border-radius: 24px; padding: 35px; width: 280px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .game-card:hover { transform: translateY(-10px); border-color: #39ff14; box-shadow: 0 0 35px rgba(57, 255, 20, 0.4); }
+        .game-logo { width: 90px; height: 90px; background: #141420; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 45px; border: 2px solid #bc13fe; margin-bottom: 20px; }
+        .game-card h3 { font-size: 24px; margin: 10px 0; }
+        .game-card p { color: #b0b0bc; font-size: 14px; height: 60px; }
+        
+        /* PLAY STORE BUTONU */
+        .store-btn {
+            background: linear-gradient(135deg, #00f2ff, #0072ff); color: #fff; border: none; padding: 15px 30px; border-radius: 12px;
+            cursor: pointer; font-weight: bold; font-size: 15px; width: 100%; text-transform: uppercase; transition: 0.3s;
+        }
+        .store-btn:hover { background: linear-gradient(135deg, #39ff14, #2cd810); color: #000; box-shadow: 0 0 20px #39ff14; }
+        
+        .game-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 2, 5, 0.97); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px); }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ff4757; cursor: pointer; }
+        .conquest-container { width: 90%; max-width: 600px; background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 25px; box-sizing: border-box; }
+        .cq-btn { padding: 12px 24px; font-size: 16px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; text-transform: uppercase; }
+        .cq-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        .cq-card { background: #0b0c10; padding: 10px; border-radius: 8px; text-align: center; border-left: 3px solid #00f2ff; }
+        .cq-card h4 { margin: 0; font-size: 12px; color: #bc13fe; }
+        .cq-card p { margin: 5px 0 0 0; font-size: 16px; font-weight: bold; }
+        .cq-log { background: #000; border: 1px solid #333; height: 120px; overflow-y: auto; padding: 10px; border-radius: 8px; font-family: monospace; font-size: 13px; color: #39ff14; }
+    </style>
+</head>
+<body>
+
+    <nav><a href="#magaza">Ana Sayfa</a></nav>
+
+    <section class="hero">
+        <h1>İmparatorluk Fethi</h1>
+        <p>Resmi Web Sitesi Kurulum Ekranı</p>
+    </section>
+
+    <div class="container" id="magaza">
+        <h2>Uygulama Mağazası</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-logo">⚔️</div>
+                <h3>İmparatorluk Fethi</h3>
+                <p>Kendi krallığını kur, ordunu yönet ve dünyayı ele geçir!</p>
+                <button id="pwa-install-btn" class="store-btn" onclick="installAppDirectly()">UYGULAMAYI TELEFONA İNDİR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-conquest" class="game-popup">
+        <span class="close-btn" onclick="closeGame()">&times;</span>
+        <div class="conquest-container">
+            <h3 style="color:#00f2ff; text-align:center; font-size: 28px; margin-top:0;">⚔️ İMPARATORLUK FETHİ</h3>
+            <div id="cq-board">
+                <div class="cq-dashboard">
+                    <div class="cq-card"><h4>Toprak</h4><p id="cq-land">%15</p></div>
+                    <div class="cq-card"><h4>Hazine</h4><p id="cq-gold">500 💰</p></div>
+                    <div class="cq-card"><h4>Ordu</h4><p id="cq-army">100 ⚔️</p></div>
+                    <div class="cq-card"><h4>Teknoloji</h4><p id="cq-tech">T1 🔬</p></div>
+                </div>
+                <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                    <button class="cq-btn" onclick="cqRecruit()">Ordu Topla (-100💰)</button>
+                    <button class="cq-btn" onclick="cqTax()">Vergi Al 💰</button>
+                </div>
+                <div class="cq-log" id="cq-log-box">> Savaşa hazırsınız! Ordunuzu büyütün ve krallığı genişletin.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        // Telefona yükleme komutunu yakalayan event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.textContent = "ANA EKRANA UYGULAMA OLARAK KUR";
+            installBtn.style.background = "linear-gradient(135deg, #39ff14, #2cd810)";
+            installBtn.style.color = "#000";
+        });
+
+        // Sitedeki sw.js dosyasını fiziksel olarak tarayıcıya kaydetme adımı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log("Servis Yöneticisi Aktif."))
+                    .catch((err) => console.log("Hata:", err));
+            });
+        }
+
+        function installAppDirectly() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        installBtn.textContent = "YÜKLENDİ ✓";
+                        installBtn.disabled = true;
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert("Safari Kısıtlaması Nedeniyle:\nTarayıcınızın altındaki 'Paylaş' simgesine basıp 'Ana Ekrana Ekle' seçeneğini seçerek oyunu telefonunuza indirebilirsiniz.");
+                } else {
+                    alert("Oyun açılıyor! Eğer telefonunuzda yükleme penceresi çıkmadıysa, tarayıcı ayarlarından (sağ üstteki 3 nokta) 'Uygulamayı Yükle' seçeneğine dokunarak ana ekrana ekleyebilirsiniz.");
+                }
+                openGame();
+            }
+        }
+
+        // --- OYUN KODLARI ---
+        let cqGold = 500, cqArmy = 100, cqTech = 1, cqLand = 15;
+        function openGame() { document.getElementById('popup-conquest').style.display = 'flex'; }
+        function closeGame() { document.getElementById('popup-conquest').style.display = 'none'; }
+        
+        function cqRecruit() {
+            if(cqGold >= 100) { cqGold -= 100; cqArmy += 50; document.getElementById('cq-log-box').innerHTML += "<br>> Yeni birlikler katıldı (+50)."; cqUpdateUI(); } 
+            else alert("Yetersiz altın!");
+        }
+        function cqTax() {
+            let kazanc = cqLand * 5; cqGold += kazanc;
+            if(Math.random() > 0.5) { cqLand += 2; document.getElementById('cq-log-box').innerHTML += `<br>> Fetih başarılı! (+%2 Toprak). Hazineye +${kazanc} altın eklendi.`; } 
+            else { document.getElementById('cq-log-box').innerHTML += `<br>> Vergiler toplandı: +${kazanc} altın.`; }
+            cqUpdateUI();
+        }
+        function cqUpdateUI() {
+            document.getElementById('cq-gold').textContent = cqGold + " 💰";
+            document.getElementById('cq-army').textContent = cqArmy + " ⚔️";
+            document.getElementById('cq-land').textContent = "%" + cqLand;
+            const log = document.getElementById('cq-log-box'); log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>
