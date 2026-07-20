@@ -324,7 +324,7 @@
         <div id="ai-panel">
             <div class="ai-title">✨ Smart AI Pro</div>
             <div id="ai-chat-box">
-                <div class="ai-msg bot">Selam! Mobil veya PC fark etmeksizin tüm oyunlar ekranına tam uyumlu hale getirildi. Dilediğini sorabilirsin!</div>
+                <div class="ai-msg bot">Selam! Mobil veya PC fark etmeksizin tüm oyunlar cihazına indirilebilir ve çevrimdışı oynanabilir.</div>
             </div>
             <div class="ai-input-area">
                 <input type="text" id="ai-input" placeholder="Yapay zekaya yaz..." onkeydown="if(event.key==='Enter') sendAIMessage()">
@@ -571,7 +571,16 @@
             rps: { id: 'rps', logo: '✂️', title: 'Taş Kağıt Makas', desc: 'Bilgisayara karşı hamleni yap ve kazan!' },
             brick: { id: 'brick', logo: '🧱', title: 'Tuğla Kırma', desc: 'Topu düşürmeden tüm tuğlaları yok et!' }
         };
-        const MAĞAZA_OYUNLARI = { conquest: { id: 'conquest', logo: '⚔️', title: 'İmparatorluk Fethi', desc: 'Stratejik fetih ve yönetim simülasyonu.' } };
+
+        const MAĞAZA_OYUNLARI = { 
+            conquest: { 
+                id: 'conquest', 
+                logo: '⚔️', 
+                title: 'İmparatorluk Fethi', 
+                desc: 'Cihaza dosya olarak inen tam sürümlü stratejik fetih ve yönetim simülasyonu.' 
+            } 
+        };
+
         let magazadanYuklenenler = JSON.parse(localStorage.getItem('magazadanYuklenenler')) || [];
 
         function updateUIVisuals() {
@@ -591,39 +600,129 @@
             Object.keys(MAĞAZA_OYUNLARI).forEach(id => {
                 let g = MAĞAZA_OYUNLARI[id];
                 let isIns = magazadanYuklenenler.includes(id);
-                let btn = isIns ? `<div class="store-btn-wrapper"><button class="store-btn" disabled>Yüklendi ✓</button><button class="reload-btn" onclick="reinstallGame('${id}')">🔄 Tekrar İndir</button></div>` : `<button class="store-btn" onclick="installAndDownload('${id}')">Yükle</button>`;
+                let btn = isIns 
+                    ? `<div class="store-btn-wrapper"><button class="store-btn" disabled>Yüklendi ✓</button><button class="reload-btn" onclick="triggerFileDownload('${id}')">🔄 Cihaza Tekrar İndir</button></div>` 
+                    : `<button class="store-btn" onclick="installAndDownload('${id}')">Cihaza İndir</button>`;
+                
                 storeArea.innerHTML += `<div class="game-card" style="border-color:#00f2ff;"><div class="game-logo" style="border-color:#00f2ff;">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p>${btn}</div>`;
             });
         }
 
-        /* DÖNÜŞTÜRÜLMÜŞ GERÇEK CİHAZ DOSYA İNDİRME FONKSİYONU */
+        /* OYUNUN TÜM KODLARINI VE MANTIĞINI CİHAZA İNDİREN MOTOR */
         function triggerFileDownload(id) {
             const gameData = MAĞAZA_OYUNLARI[id];
             if (!gameData) return;
 
-            // İndirilen cihazda bağımsız çalışabilecek çevrimdışı HTML oyun içeriği
+            // Cihazda bağımsız ve internetsiz çalışan tam sürümlü HTML oyun dosyası
             const fileHTMLContent = `<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${gameData.title}</title>
+    <title>${gameData.title} - Çevrimdışı Oyunu</title>
     <style>
-        body { background: #0b0c10; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; margin: 0; }
-        .box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; max-width: 400px; margin: 30px auto; background: #1f2833; }
-        button { background: #00f2ff; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        body { background: #0b0c10; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px; }
+        .cq-card { background: #1f2833; border: 2px solid #00f2ff; border-radius: 16px; padding: 20px; max-width: 500px; margin: 20px auto; box-shadow: 0 0 20px rgba(0,242,255,0.2); }
+        .cq-btn { padding: 10px 18px; font-size: 14px; font-weight: bold; background: #00f2ff; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 5px; transition: 0.2s; }
+        .cq-btn:hover { background: #39ff14; }
+        .cq-dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .cq-box { background: #0b0c10; padding: 10px; border-radius: 8px; border-left: 3px solid #00f2ff; }
+        .cq-log { background: #000; border: 1px solid #333; height: 100px; overflow-y: auto; padding: 10px; border-radius: 8px; font-family: monospace; font-size: 12px; color: #39ff14; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>${gameData.logo} ${gameData.title}</h1>
-        <p>${gameData.desc}</p>
-        <p style="color:#39ff14;">✅ Oyunu cihazınızın klasörüne başarıyla indirdiniz!</p>
-        <button onclick="alert('Çevrimdışı oyun hazır! İyi oyunlar.')">Oyunu Başlat</button>
+    <div class="cq-card">
+        <h2 style="color:#00f2ff; margin-top:0;">${gameData.logo} ${gameData.title}</h2>
+        <div id="setup-screen">
+            <p>İmparatorluğunu Seç ve Çevrimdışı Savaşa Başla:</p>
+            <select id="emp-select" style="padding:8px; font-size:14px; border-radius:6px; background:#141420; color:#fff; border:1px solid #00f2ff;">
+                <option value="Valoria">Valoria Krallığı (Ekonomi)</option>
+                <option value="Shadowfang">Shadowfang Klanı (Askeri)</option>
+                <option value="Aethelgard">Aethelgard Düzeni (Teknoloji)</option>
+            </select><br><br>
+            <button class="cq-btn" onclick="startOfflineGame()">Oyunu Başlat</button>
+        </div>
+
+        <div id="game-screen" style="display:none;">
+            <h3 id="emp-title" style="color:#39ff14; margin:5px 0;"></h3>
+            <div class="cq-dashboard">
+                <div class="cq-box"><small style="color:#bc13fe">Toprak</small><p id="v-land" style="margin:0; font-weight:bold">%15</p></div>
+                <div class="cq-box"><small style="color:#bc13fe">Hazine</small><p id="v-gold" style="margin:0; font-weight:bold">500 💰</p></div>
+                <div class="cq-box"><small style="color:#bc13fe">Ordu</small><p id="v-army" style="margin:0; font-weight:bold">100 ⚔️</p></div>
+                <div class="cq-box"><small style="color:#bc13fe">Teknoloji</small><p id="v-tech" style="margin:0; font-weight:bold">T1 🔬</p></div>
+            </div>
+            <div>
+                <button class="cq-btn" onclick="actRecruit()">Ordu Al (-100💰)</button>
+                <button class="cq-btn" onclick="actUpgrade()">Geliş (-300💰)</button>
+                <button class="cq-btn" onclick="actTax()">Vergi Al 💰</button>
+            </div>
+            <div id="enemy-list" style="margin-top:15px;"></div>
+            <p style="text-align:left; font-size:12px; color:#aaa; margin-bottom:5px;">Savaş Günlüğü:</p>
+            <div class="cq-log" id="log-box">> Cihazınızda çevrimdışı oynuyorsunuz.</div>
+        </div>
     </div>
+
+    <script>
+        let gold=500, army=100, tech=1, land=15, empName="";
+        let enemies = [
+            { id: 1, name: "Necroshane Laneti", land: 25, army: 110, logo: "💀" },
+            { id: 2, name: "Solaria İmparatorluğu", land: 20, army: 140, logo: "☀️" },
+            { id: 3, name: "Frostmaul Hanedanı", land: 20, army: 90, logo: "❄️" }
+        ];
+
+        function startOfflineGame() {
+            empName = document.getElementById('emp-select').value;
+            if(empName==="Valoria") gold=800; if(empName==="Shadowfang") army=170; if(empName==="Aethelgard") tech=2;
+            document.getElementById('emp-title').textContent = empName + " İmparatorluğu";
+            document.getElementById('setup-screen').style.display='none';
+            document.getElementById('game-screen').style.display='block';
+            updateGameUI();
+        }
+
+        function printLog(msg) {
+            const l = document.getElementById('log-box');
+            l.innerHTML += "<br>> " + msg;
+            l.scrollTop = l.scrollHeight;
+        }
+
+        function updateGameUI() {
+            document.getElementById('v-gold').textContent = gold + " 💰";
+            document.getElementById('v-army').textContent = army + " ⚔️";
+            document.getElementById('v-tech').textContent = "T" + tech + " 🔬";
+            document.getElementById('v-land').textContent = "%" + land;
+
+            const el = document.getElementById('enemy-list');
+            el.innerHTML = '';
+            enemies.forEach(e => {
+                if(e.land > 0) {
+                    el.innerHTML += \`<div style="display:flex; justify-content:space-between; align-items:center; background:#141420; padding:8px; border-radius:8px; margin-bottom:5px;">
+                        <span style="font-size:12px;">\${e.logo} <b>\${e.name}</b> (%\${e.land})</span>
+                        <button class="cq-btn" style="background:#ff4757; color:#fff; padding:4px 8px; font-size:11px;" onclick="actAttack(\${e.id})">Saldır</button>
+                    </div>\`;
+                }
+            });
+        }
+
+        function actRecruit() { if(gold>=100){ gold-=100; army+=50; printLog("Asker toplandı!"); updateGameUI(); } else printLog("Altın yetersiz!"); }
+        function actUpgrade() { if(gold>=300){ gold-=300; tech++; printLog("Teknoloji yükseltildi!"); updateGameUI(); } else printLog("Altın yetersiz!"); }
+        function actTax() { gold += (land*4 + tech*10); printLog("Vergiler toplandı."); updateGameUI(); }
+        function actAttack(id) {
+            let e = enemies.find(x => x.id === id);
+            if(!e || army<=0) return;
+            if(army > e.army) {
+                let gain = Math.min(e.land, 10);
+                e.land -= gain; land += gain; army -= 20; gold += 150;
+                printLog("Zafer! %" + gain + " toprak fethedildi.");
+            } else {
+                army -= 40; printLog("Savaş kaybedildi!");
+            }
+            updateGameUI();
+        }
+    <\/script>
 </body>
 </html>`;
 
+            // İndirme işlemini başlat
             const blob = new Blob([fileHTMLContent], { type: 'text/html' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -640,10 +739,6 @@
                 localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler)); 
                 updateUIVisuals(); 
             }
-            triggerFileDownload(id);
-        }
-
-        function reinstallGame(id) { 
             triggerFileDownload(id);
         }
 
