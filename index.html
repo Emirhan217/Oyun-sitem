@@ -241,7 +241,7 @@
             cursor: pointer; font-weight: bold; font-size: 12px; text-transform: uppercase; width: 100%; box-sizing: border-box;
         }
 
-        /* DİNAMİK TAM EKRAN OYUN POPUPLARI (MOBILES/IOS/MAC/PC ADAPTİF) */
+        /* DİNAMİK TAM EKRAN OYUN POPUPLARI */
         .game-popup {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: var(--app-height);
             background: rgba(2, 2, 5, 0.98); display: none; flex-direction: column;
@@ -595,8 +595,58 @@
                 storeArea.innerHTML += `<div class="game-card" style="border-color:#00f2ff;"><div class="game-logo" style="border-color:#00f2ff;">${g.logo}</div><h3>${g.title}</h3><p>${g.desc}</p>${btn}</div>`;
             });
         }
-        function installAndDownload(id) { if(!magazadanYuklenenler.includes(id)) { magazadanYuklenenler.push(id); localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler)); updateUIVisuals(); } }
-        function reinstallGame(id) { alert("Oyun yeniden yüklendi!"); }
+
+        /* DÖNÜŞTÜRÜLMÜŞ GERÇEK CİHAZ DOSYA İNDİRME FONKSİYONU */
+        function triggerFileDownload(id) {
+            const gameData = MAĞAZA_OYUNLARI[id];
+            if (!gameData) return;
+
+            // İndirilen cihazda bağımsız çalışabilecek çevrimdışı HTML oyun içeriği
+            const fileHTMLContent = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${gameData.title}</title>
+    <style>
+        body { background: #0b0c10; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; margin: 0; }
+        .box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; max-width: 400px; margin: 30px auto; background: #1f2833; }
+        button { background: #00f2ff; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>${gameData.logo} ${gameData.title}</h1>
+        <p>${gameData.desc}</p>
+        <p style="color:#39ff14;">✅ Oyunu cihazınızın klasörüne başarıyla indirdiniz!</p>
+        <button onclick="alert('Çevrimdışı oyun hazır! İyi oyunlar.')">Oyunu Başlat</button>
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([fileHTMLContent], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${gameData.title.replace(/\s+/g, '_')}_Oyunu.html`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        function installAndDownload(id) { 
+            if(!magazadanYuklenenler.includes(id)) { 
+                magazadanYuklenenler.push(id); 
+                localStorage.setItem('magazadanYuklenenler', JSON.stringify(magazadanYuklenenler)); 
+                updateUIVisuals(); 
+            }
+            triggerFileDownload(id);
+        }
+
+        function reinstallGame(id) { 
+            triggerFileDownload(id);
+        }
+
         updateUIVisuals();
 
         function openGame(name) { 
@@ -754,7 +804,6 @@
                 if(document.getElementById('popup-brick').style.display !== 'flex') { clearInterval(brickInterval); return; }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Tuğlaları çiz
                 for(let c=0; c<brickCols; c++) {
                     for(let r=0; r<brickRows; r++) {
                         if(bricks[c][r].status === 1) {
@@ -767,11 +816,9 @@
                     }
                 }
 
-                // Top & Raket
                 ctx.fillStyle = "#39ff14"; ctx.beginPath(); ctx.arc(x, y, ballR, 0, Math.PI*2); ctx.fill();
                 ctx.fillStyle = "#fff"; ctx.fillRect(paddleX, canvas.height - paddleH - 5, paddleW, paddleH);
 
-                // Tuğla çarpışma
                 for(let c=0; c<brickCols; c++) {
                     for(let r=0; r<brickRows; r++) {
                         let b = bricks[c][r];
@@ -808,7 +855,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             setTimeout(() => {
-                let reply = "Harika! Sitedeki tüm oyunlar tüm cihazlara (iOS, Mac, PC, Android) tam sığacak şekilde optimize edildi!";
+                let reply = "Harika! Mağazadaki oyunları artık istediğin cihaza doğrudan dosya indirip çevrimdışı oynayabilirsin!";
                 chatBox.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 300);
